@@ -1,0 +1,260 @@
+// Mini-histoires audio du mode Écoute.
+// lines : [locuteur, "anglais", "français"]. Locuteurs : "N" = narrateur, "A" = voix principale, "B" = seconde voix.
+// speakers : nom affiché pour chaque locuteur. questions : réponse = index de la bonne option.
+
+const STORIES = [
+  /* ---------- A1 ---------- */
+  {
+    id: "s1", level: "A1", icon: "⏰", title: "Le matin de Tom", desc: "Une routine bien réglée",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "Tom wakes up at seven o'clock every morning.", "Tom se réveille à sept heures tous les matins."],
+      ["N", "First, he takes a shower and gets dressed.", "D'abord, il prend une douche et s'habille."],
+      ["N", "Then he makes coffee in the kitchen.", "Ensuite, il fait du café dans la cuisine."],
+      ["N", "He doesn't eat much for breakfast, just some bread with butter.", "Il ne mange pas beaucoup au petit-déjeuner, juste du pain avec du beurre."],
+      ["N", "At eight o'clock, he takes the bus to work.", "À huit heures, il prend le bus pour aller au travail."],
+      ["N", "The bus is always full, so he reads a book on his phone.", "Le bus est toujours plein, alors il lit un livre sur son téléphone."],
+      ["N", "Tom works in a small office in the city centre.", "Tom travaille dans un petit bureau au centre-ville."],
+      ["N", "He likes his job, but he doesn't like Mondays!", "Il aime son travail, mais il n'aime pas les lundis !"],
+    ],
+    questions: [
+      { q: "What time does Tom wake up?", fr: "À quelle heure Tom se réveille-t-il ?", options: ["At six o'clock", "At seven o'clock", "At eight o'clock"], answer: 1 },
+      { q: "How does Tom go to work?", fr: "Comment Tom va-t-il au travail ?", options: ["By car", "By bus", "On foot"], answer: 1 },
+      { q: "What does Tom eat for breakfast?", fr: "Que mange Tom au petit-déjeuner ?", options: ["Eggs and bacon", "Nothing", "Bread with butter"], answer: 2 },
+    ],
+  },
+  {
+    id: "s2", level: "A1", icon: "☕", title: "Au café", desc: "Lucy commande son petit-déjeuner",
+    speakers: { A: "Lucy", B: "Le serveur" },
+    lines: [
+      ["B", "Good morning! What can I get you?", "Bonjour ! Qu'est-ce que je vous sers ?"],
+      ["A", "Hi! Can I have a large cappuccino, please?", "Salut ! Je peux avoir un grand cappuccino, s'il vous plaît ?"],
+      ["B", "Of course. Anything to eat?", "Bien sûr. Quelque chose à manger ?"],
+      ["A", "Yes, a chocolate muffin, please.", "Oui, un muffin au chocolat, s'il vous plaît."],
+      ["B", "I'm sorry, we don't have any chocolate muffins today. We have blueberry muffins.", "Désolé, nous n'avons pas de muffins au chocolat aujourd'hui. Nous avons des muffins aux myrtilles."],
+      ["A", "OK, no problem. A blueberry muffin, then.", "D'accord, pas de souci. Un muffin aux myrtilles, alors."],
+      ["B", "Is that to eat in or take away?", "Sur place ou à emporter ?"],
+      ["A", "Take away, please. How much is it?", "À emporter, s'il vous plaît. Ça fait combien ?"],
+      ["B", "That's six pounds fifty.", "Ça fait six livres cinquante."],
+      ["A", "Here you are. Thanks!", "Voilà. Merci !"],
+    ],
+    questions: [
+      { q: "What drink does Lucy order?", fr: "Quelle boisson Lucy commande-t-elle ?", options: ["A small tea", "A large cappuccino", "An orange juice"], answer: 1 },
+      { q: "Why doesn't she get a chocolate muffin?", fr: "Pourquoi n'a-t-elle pas de muffin au chocolat ?", options: ["There aren't any today", "It's too expensive", "She doesn't like chocolate"], answer: 0 },
+      { q: "How much does she pay?", fr: "Combien paie-t-elle ?", options: ["£5.50", "£6.15", "£6.50"], answer: 2 },
+    ],
+  },
+  {
+    id: "s3", level: "A1", icon: "👨‍👩‍👧‍👦", title: "La famille de Sarah", desc: "Sarah se présente",
+    speakers: { N: "Sarah" },
+    lines: [
+      ["N", "Hi! My name is Sarah and I'm thirty-two years old.", "Salut ! Je m'appelle Sarah et j'ai trente-deux ans."],
+      ["N", "I live in Bristol with my husband, Mark, and our two children.", "J'habite à Bristol avec mon mari, Mark, et nos deux enfants."],
+      ["N", "Our son, Leo, is eight, and our daughter, Mia, is five.", "Notre fils, Leo, a huit ans, et notre fille, Mia, a cinq ans."],
+      ["N", "Mark is a nurse and he works at the hospital.", "Mark est infirmier et il travaille à l'hôpital."],
+      ["N", "I'm a teacher at a primary school.", "Je suis institutrice dans une école primaire."],
+      ["N", "My parents live in Scotland, so we don't see them very often.", "Mes parents habitent en Écosse, donc nous ne les voyons pas très souvent."],
+      ["N", "But every summer, we visit them for two weeks.", "Mais chaque été, nous leur rendons visite pendant deux semaines."],
+      ["N", "The children love it because my dad has a big dog!", "Les enfants adorent, parce que mon père a un gros chien !"],
+    ],
+    questions: [
+      { q: "How many children does Sarah have?", fr: "Combien d'enfants Sarah a-t-elle ?", options: ["One", "Two", "Three"], answer: 1 },
+      { q: "What is Mark's job?", fr: "Quel est le métier de Mark ?", options: ["He's a teacher", "He's a doctor", "He's a nurse"], answer: 2 },
+      { q: "Why do the children love visiting their grandparents?", fr: "Pourquoi les enfants adorent-ils aller chez leurs grands-parents ?", options: ["Because of the beach", "Because of the dog", "Because of the presents"], answer: 1 },
+    ],
+  },
+
+  /* ---------- A2 ---------- */
+  {
+    id: "s4", level: "A2", icon: "🎡", title: "Un week-end à Londres", desc: "Julie et Nadia visitent la capitale",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "Last weekend, Julie went to London with her best friend, Nadia.", "Le week-end dernier, Julie est allée à Londres avec sa meilleure amie, Nadia."],
+      ["N", "They took the train from Paris on Friday evening.", "Elles ont pris le train depuis Paris le vendredi soir."],
+      ["N", "On Saturday morning, they visited the British Museum. It was free!", "Le samedi matin, elles ont visité le British Museum. C'était gratuit !"],
+      ["N", "In the afternoon, it started to rain, so they went shopping in Covent Garden.", "L'après-midi, il s'est mis à pleuvoir, alors elles sont allées faire du shopping à Covent Garden."],
+      ["N", "Julie bought a red umbrella and Nadia bought a book.", "Julie a acheté un parapluie rouge et Nadia a acheté un livre."],
+      ["N", "In the evening, they had fish and chips in a small pub.", "Le soir, elles ont mangé un fish and chips dans un petit pub."],
+      ["N", "On Sunday, the weather was beautiful, so they walked along the river.", "Le dimanche, il faisait beau, alors elles se sont promenées le long de la rivière."],
+      ["N", "They were tired but very happy when they came home.", "Elles étaient fatiguées mais très contentes en rentrant."],
+    ],
+    questions: [
+      { q: "How did Julie and Nadia travel to London?", fr: "Comment Julie et Nadia sont-elles allées à Londres ?", options: ["By plane", "By train", "By car"], answer: 1 },
+      { q: "What did they do when it started to rain?", fr: "Qu'ont-elles fait quand il s'est mis à pleuvoir ?", options: ["They went to the cinema", "They went back to the hotel", "They went shopping"], answer: 2 },
+      { q: "What did Julie buy?", fr: "Qu'a acheté Julie ?", options: ["A book", "A red umbrella", "A red bag"], answer: 1 },
+      { q: "What was the weather like on Sunday?", fr: "Quel temps faisait-il dimanche ?", options: ["It was beautiful", "It was raining", "It was cold"], answer: 0 },
+    ],
+  },
+  {
+    id: "s5", level: "A2", icon: "🛫", title: "Perdu à l'aéroport", desc: "Marc cherche sa porte d'embarquement",
+    speakers: { A: "Marc", B: "L'agent" },
+    lines: [
+      ["A", "Excuse me, I think I'm lost. I need to find gate twenty-two.", "Excusez-moi, je crois que je suis perdu. Je dois trouver la porte 22."],
+      ["B", "Let me see your boarding pass… Oh, your flight leaves from Terminal 2.", "Montrez-moi votre carte d'embarquement… Oh, votre vol part du terminal 2."],
+      ["A", "Terminal 2? But this is Terminal 1!", "Le terminal 2 ? Mais on est au terminal 1 !"],
+      ["B", "Don't worry. There's a free shuttle train. It leaves every five minutes.", "Ne vous inquiétez pas. Il y a une navette gratuite. Elle part toutes les cinq minutes."],
+      ["A", "Where can I take it?", "Où est-ce que je peux la prendre ?"],
+      ["B", "Go down the stairs, then turn right. You'll see the signs.", "Descendez l'escalier, puis tournez à droite. Vous verrez les panneaux."],
+      ["A", "How long does it take?", "Combien de temps ça prend ?"],
+      ["B", "About ten minutes. Your flight leaves at eleven, so you have plenty of time.", "Environ dix minutes. Votre vol part à onze heures, vous avez largement le temps."],
+      ["A", "Thank you so much!", "Merci beaucoup !"],
+    ],
+    questions: [
+      { q: "Which gate does Marc need?", fr: "Quelle porte Marc cherche-t-il ?", options: ["Gate twelve", "Gate twenty-two", "Gate twenty"], answer: 1 },
+      { q: "How does he get to Terminal 2?", fr: "Comment va-t-il au terminal 2 ?", options: ["By taxi", "On foot", "By shuttle train"], answer: 2 },
+      { q: "How often does the shuttle leave?", fr: "À quelle fréquence part la navette ?", options: ["Every five minutes", "Every ten minutes", "Every hour"], answer: 0 },
+    ],
+  },
+  {
+    id: "s6", level: "A2", icon: "🧑‍💻", title: "Le nouveau collègue", desc: "Premier jour au bureau pour Raj",
+    speakers: { A: "Emma", B: "Raj" },
+    lines: [
+      ["A", "Hi, you must be the new developer. I'm Emma, from the marketing team.", "Salut, tu dois être le nouveau développeur. Moi, c'est Emma, de l'équipe marketing."],
+      ["B", "Hi Emma, nice to meet you! Yes, I'm Raj. It's my first day.", "Salut Emma, enchanté ! Oui, je suis Raj. C'est mon premier jour."],
+      ["A", "Welcome! How was your journey this morning?", "Bienvenue ! Comment s'est passé ton trajet ce matin ?"],
+      ["B", "Not great. The train was late, and I had to stand all the way.", "Pas génial. Le train était en retard, et j'ai dû rester debout tout le trajet."],
+      ["A", "Oh, that happens a lot on that line. Some of us cycle to work.", "Ah, ça arrive souvent sur cette ligne. Certains d'entre nous viennent à vélo."],
+      ["B", "That's a good idea. Is there somewhere to park a bike?", "Bonne idée. Il y a un endroit pour garer un vélo ?"],
+      ["A", "Yes, in the car park, behind the building.", "Oui, dans le parking, derrière le bâtiment."],
+      ["A", "By the way, we usually have lunch together on Fridays. Do you want to join us?", "Au fait, on déjeune souvent ensemble le vendredi. Tu veux te joindre à nous ?"],
+      ["B", "I'd love to. Thanks, Emma!", "Avec plaisir. Merci, Emma !"],
+    ],
+    questions: [
+      { q: "What is Raj's job?", fr: "Quel est le métier de Raj ?", options: ["He's a developer", "He works in marketing", "He's a manager"], answer: 0 },
+      { q: "Why was his journey difficult?", fr: "Pourquoi son trajet a-t-il été difficile ?", options: ["He got lost", "The train was late", "His bike broke"], answer: 1 },
+      { q: "When does the team have lunch together?", fr: "Quand l'équipe déjeune-t-elle ensemble ?", options: ["On Mondays", "Every day", "On Fridays"], answer: 2 },
+    ],
+  },
+
+  /* ---------- B1 ---------- */
+  {
+    id: "s7", level: "B1", icon: "🏨", title: "L'hôtel décevant", desc: "Des vacances qui commencent mal",
+    speakers: { N: "Ben" },
+    lines: [
+      ["N", "When we arrived at the hotel, I knew something was wrong.", "Quand nous sommes arrivés à l'hôtel, j'ai su que quelque chose n'allait pas."],
+      ["N", "The photos on the website showed a modern building with a swimming pool.", "Les photos sur le site montraient un bâtiment moderne avec une piscine."],
+      ["N", "In reality, the building was old, and the pool had been closed for months.", "En réalité, le bâtiment était vieux, et la piscine était fermée depuis des mois."],
+      ["N", "Our room was tiny, and the window looked onto a car park.", "Notre chambre était minuscule, et la fenêtre donnait sur un parking."],
+      ["N", "Even worse, the air conditioning didn't work, and it was thirty-five degrees outside.", "Pire encore, la climatisation ne marchait pas, et il faisait trente-cinq degrés dehors."],
+      ["N", "I went down to reception and complained, politely but firmly.", "Je suis descendu à la réception et je me suis plaint, poliment mais fermement."],
+      ["N", "The manager apologised and offered us a different room on the top floor.", "Le directeur s'est excusé et nous a proposé une autre chambre au dernier étage."],
+      ["N", "It had a balcony and a view of the sea, so in the end, we were quite happy.", "Elle avait un balcon et une vue sur la mer, donc finalement, nous étions plutôt contents."],
+      ["N", "Lesson learned: always read the reviews, not just the photos!", "Leçon retenue : toujours lire les avis, pas seulement regarder les photos !"],
+    ],
+    questions: [
+      { q: "What was wrong with the swimming pool?", fr: "Quel était le problème de la piscine ?", options: ["It was dirty", "It was closed", "It was too small"], answer: 1 },
+      { q: "What problem did the room have?", fr: "Quel problème avait la chambre ?", options: ["The air conditioning didn't work", "The shower was broken", "It was very noisy"], answer: 0 },
+      { q: "How did the manager solve the problem?", fr: "Comment le directeur a-t-il réglé le problème ?", options: ["He gave them a refund", "He offered them another room", "He fixed the air conditioning"], answer: 1 },
+      { q: "What advice does Ben give?", fr: "Quel conseil Ben donne-t-il ?", options: ["Book early", "Always read the reviews", "Never travel in summer"], answer: 1 },
+    ],
+  },
+  {
+    id: "s8", level: "B1", icon: "🤝", title: "L'entretien d'embauche", desc: "Lucas postule dans une entreprise internationale",
+    speakers: { A: "Lucas", B: "La recruteuse" },
+    lines: [
+      ["B", "Thanks for coming in, Lucas. Could you tell me a bit about your background?", "Merci d'être venu, Lucas. Pourriez-vous me parler un peu de votre parcours ?"],
+      ["A", "Sure. I studied marketing in Lyon, and I've been working for a travel company for four years.", "Bien sûr. J'ai étudié le marketing à Lyon, et je travaille pour une agence de voyages depuis quatre ans."],
+      ["B", "And why are you interested in this position?", "Et pourquoi ce poste vous intéresse-t-il ?"],
+      ["A", "I'd like to work in an international team, and I really admire your products.", "J'aimerais travailler dans une équipe internationale, et j'admire vraiment vos produits."],
+      ["B", "What would you say is your biggest weakness?", "Quel serait votre plus grand point faible, selon vous ?"],
+      ["A", "I sometimes find it hard to say no, so I take on too much work.", "J'ai parfois du mal à dire non, alors je prends trop de travail."],
+      ["A", "But I've learned to prioritise and to ask for help when I need it.", "Mais j'ai appris à établir des priorités et à demander de l'aide quand j'en ai besoin."],
+      ["B", "That's a very honest answer. When could you start?", "C'est une réponse très honnête. Quand pourriez-vous commencer ?"],
+      ["A", "I have to give one month's notice, so from the first of March.", "Je dois donner un mois de préavis, donc à partir du premier mars."],
+    ],
+    questions: [
+      { q: "How long has Lucas worked for the travel company?", fr: "Depuis combien de temps Lucas travaille-t-il pour l'agence de voyages ?", options: ["For two years", "For four years", "For six years"], answer: 1 },
+      { q: "Why does he want this job?", fr: "Pourquoi veut-il ce poste ?", options: ["For a better salary", "To work in an international team", "To live in London"], answer: 1 },
+      { q: "What is his weakness?", fr: "Quel est son point faible ?", options: ["He is often late", "He finds it hard to say no", "He doesn't like teamwork"], answer: 1 },
+      { q: "When can he start?", fr: "Quand peut-il commencer ?", options: ["Immediately", "Next week", "On the first of March"], answer: 2 },
+    ],
+  },
+  {
+    id: "s9", level: "B1", icon: "🕯️", title: "La panne de courant", desc: "Un dîner qui ne se passe pas comme prévu",
+    speakers: { N: "Chloe" },
+    lines: [
+      ["N", "I was cooking dinner for my friends when the lights suddenly went out.", "Je préparais le dîner pour mes amis quand les lumières se sont soudain éteintes."],
+      ["N", "At first, I thought it was just a fuse, but the whole street was dark.", "Au début, j'ai cru que c'était juste un fusible, mais toute la rue était plongée dans le noir."],
+      ["N", "My guests were arriving in twenty minutes, and the chicken was only half cooked.", "Mes invités arrivaient dans vingt minutes, et le poulet n'était qu'à moitié cuit."],
+      ["N", "I didn't panic. I lit some candles and called the nearest pizza place.", "Je n'ai pas paniqué. J'ai allumé des bougies et j'ai appelé la pizzeria la plus proche."],
+      ["N", "Unfortunately, their ovens didn't work either!", "Malheureusement, leurs fours ne marchaient pas non plus !"],
+      ["N", "When my friends arrived, we ate bread, cheese and salad by candlelight.", "Quand mes amis sont arrivés, nous avons mangé du pain, du fromage et de la salade à la lueur des bougies."],
+      ["N", "We played cards and told stories for hours.", "Nous avons joué aux cartes et raconté des histoires pendant des heures."],
+      ["N", "The power came back at midnight, just as everyone was leaving.", "Le courant est revenu à minuit, juste au moment où tout le monde partait."],
+      ["N", "Funnily enough, my friends said it was the best dinner party I'd ever organised!", "Chose amusante, mes amis ont dit que c'était le meilleur dîner que j'aie jamais organisé !"],
+    ],
+    questions: [
+      { q: "What was Chloe doing when the lights went out?", fr: "Que faisait Chloe quand les lumières se sont éteintes ?", options: ["She was sleeping", "She was cooking dinner", "She was watching TV"], answer: 1 },
+      { q: "Why couldn't she order a pizza?", fr: "Pourquoi n'a-t-elle pas pu commander de pizza ?", options: ["The restaurant was closed", "Their ovens didn't work", "Her phone didn't work"], answer: 1 },
+      { q: "What did they eat in the end?", fr: "Qu'ont-ils mangé finalement ?", options: ["Chicken", "Pizza", "Bread, cheese and salad"], answer: 2 },
+      { q: "When did the power come back?", fr: "Quand le courant est-il revenu ?", options: ["At midnight", "After twenty minutes", "The next morning"], answer: 0 },
+    ],
+  },
+
+  /* ---------- B2 ---------- */
+  {
+    id: "s10", level: "B2", icon: "📉", title: "La réunion de crise", desc: "Un fournisseur fait faillite",
+    speakers: { A: "Sarah", B: "David" },
+    lines: [
+      ["A", "Thanks for joining at such short notice. I'm afraid we have a problem with the Henderson project.", "Merci d'être venus si vite. J'ai bien peur que nous ayons un problème avec le projet Henderson."],
+      ["B", "Is it the budget again?", "C'est encore le budget ?"],
+      ["A", "Not this time. Our main supplier has gone out of business, so the delivery will be at least three weeks late.", "Pas cette fois. Notre principal fournisseur a fait faillite, donc la livraison aura au moins trois semaines de retard."],
+      ["B", "That's bad news. Have we told the client yet?", "Mauvaise nouvelle. Avons-nous déjà prévenu le client ?"],
+      ["A", "Not yet. I wanted to discuss our options first.", "Pas encore. Je voulais d'abord discuter de nos options."],
+      ["B", "Well, we could try another supplier, but it would cost us more.", "Eh bien, nous pourrions essayer un autre fournisseur, mais ça nous coûterait plus cher."],
+      ["A", "True. Alternatively, we could deliver part of the order on time and the rest later.", "C'est vrai. Sinon, nous pourrions livrer une partie de la commande à temps et le reste plus tard."],
+      ["B", "I think the client would prefer that. They need the first part for their launch.", "Je pense que le client préférerait ça. Il a besoin de la première partie pour son lancement."],
+      ["A", "Agreed. I'll call them this afternoon, and I'll keep you posted.", "D'accord. Je les appelle cet après-midi, et je vous tiens au courant."],
+    ],
+    questions: [
+      { q: "What is the problem?", fr: "Quel est le problème ?", options: ["The budget is too small", "The main supplier has gone out of business", "The client has cancelled the order"], answer: 1 },
+      { q: "How late will the delivery be?", fr: "Quel retard aura la livraison ?", options: ["At least three weeks", "Three days", "Three months"], answer: 0 },
+      { q: "Which solution do they choose?", fr: "Quelle solution choisissent-ils ?", options: ["Change supplier", "Cancel the project", "Deliver part of the order on time"], answer: 2 },
+      { q: "Who will call the client?", fr: "Qui va appeler le client ?", options: ["David", "Sarah", "Nobody"], answer: 1 },
+    ],
+  },
+  {
+    id: "s11", level: "B2", icon: "🥐", title: "Changer de vie", desc: "De la banque à la boulangerie",
+    speakers: { N: "James" },
+    lines: [
+      ["N", "Five years ago, I had a well-paid job in a bank in London.", "Il y a cinq ans, j'avais un travail bien payé dans une banque à Londres."],
+      ["N", "On paper, everything was perfect, but I wasn't happy at all.", "Sur le papier, tout était parfait, mais je n'étais pas heureux du tout."],
+      ["N", "I was working twelve hours a day, and I hardly ever saw my friends.", "Je travaillais douze heures par jour, et je ne voyais presque jamais mes amis."],
+      ["N", "One day, I asked myself: if I could do anything, what would I do?", "Un jour, je me suis demandé : si je pouvais faire n'importe quoi, que ferais-je ?"],
+      ["N", "The answer was simple: I would open a small bakery by the sea.", "La réponse était simple : j'ouvrirais une petite boulangerie au bord de la mer."],
+      ["N", "My family thought I was crazy, and to be honest, I was terrified.", "Ma famille me trouvait fou et, pour être honnête, j'étais terrifié."],
+      ["N", "The first year was really hard, and I nearly gave up twice.", "La première année a été vraiment dure, et j'ai failli abandonner deux fois."],
+      ["N", "Today, I earn much less money, but I'm far happier.", "Aujourd'hui, je gagne beaucoup moins d'argent, mais je suis bien plus heureux."],
+      ["N", "If I hadn't taken that risk, I would still be wondering: what if?", "Si je n'avais pas pris ce risque, je me demanderais encore : et si ?"],
+    ],
+    questions: [
+      { q: "Why wasn't James happy at the bank?", fr: "Pourquoi James n'était-il pas heureux à la banque ?", options: ["The salary was too low", "He worked too much and rarely saw his friends", "His boss was unpleasant"], answer: 1 },
+      { q: "What did he decide to do?", fr: "Qu'a-t-il décidé de faire ?", options: ["Open a bakery by the sea", "Move abroad", "Start a new bank"], answer: 0 },
+      { q: "How did his family react?", fr: "Comment sa famille a-t-elle réagi ?", options: ["They were proud", "They thought he was crazy", "They helped him financially"], answer: 1 },
+      { q: "How does he feel today?", fr: "Comment se sent-il aujourd'hui ?", options: ["He regrets his decision", "He's richer and happier", "He earns less but he's much happier"], answer: 2 },
+    ],
+  },
+
+  /* ---------- C1 ---------- */
+  {
+    id: "s12", level: "C1", icon: "🎙️", title: "Le podcast : semaine de 4 jours", desc: "Une chercheuse fait le point",
+    speakers: { A: "L'animateur", B: "Dr Moore" },
+    lines: [
+      ["A", "Welcome back to the show. Today's topic is one that divides opinion: the four-day working week.", "Bon retour dans l'émission. Le sujet du jour divise : la semaine de quatre jours."],
+      ["A", "My guest is Dr Ellen Moore, who has studied the issue for over a decade.", "Mon invitée est la docteure Ellen Moore, qui étudie la question depuis plus de dix ans."],
+      ["B", "Thanks for having me. Let me start by saying that the results so far have been remarkably positive.", "Merci de m'accueillir. Je commencerai par dire que les résultats sont jusqu'ici remarquablement positifs."],
+      ["B", "In most trials, productivity remained stable, while stress and sick days dropped significantly.", "Dans la plupart des essais, la productivité est restée stable, tandis que le stress et les arrêts maladie ont nettement baissé."],
+      ["A", "That sounds almost too good to be true. Surely there are drawbacks?", "Ça paraît presque trop beau pour être vrai. Il y a sûrement des inconvénients ?"],
+      ["B", "Of course. It works far better in offices than in hospitals or shops, where someone always has to be present.", "Bien sûr. Ça marche bien mieux dans les bureaux que dans les hôpitaux ou les magasins, où quelqu'un doit toujours être présent."],
+      ["B", "And some employees found the longer working days exhausting.", "Et certains salariés ont trouvé les journées plus longues épuisantes."],
+      ["A", "So would you recommend it to every company?", "Alors, le recommanderiez-vous à toutes les entreprises ?"],
+      ["B", "Not necessarily. What really matters is not the number of days, but how the work is organised.", "Pas forcément. Ce qui compte vraiment, ce n'est pas le nombre de jours, mais la façon dont le travail est organisé."],
+    ],
+    questions: [
+      { q: "What happened to productivity in most trials?", fr: "Qu'est-il arrivé à la productivité dans la plupart des essais ?", options: ["It increased dramatically", "It remained stable", "It fell"], answer: 1 },
+      { q: "Where does the four-day week work best?", fr: "Où la semaine de quatre jours marche-t-elle le mieux ?", options: ["In hospitals", "In shops", "In offices"], answer: 2 },
+      { q: "Which drawback is mentioned?", fr: "Quel inconvénient est mentionné ?", options: ["Lower salaries", "Some employees found the longer days exhausting", "Clients complained"], answer: 1 },
+      { q: "What is Dr Moore's main point?", fr: "Quelle est l'idée principale de Dr Moore ?", options: ["Every company should adopt it", "Organisation matters more than the number of days", "It simply doesn't work"], answer: 1 },
+    ],
+  },
+];

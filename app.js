@@ -40,14 +40,14 @@ const BY_ID = Object.fromEntries(ALL.map(i => [i.id, i]));
 const DIALOGUE_BY_UNIT = Object.fromEntries(DIALOGUES.map(d => [d.unit, d]));
 
 /* ================= Sauvegarde ================= */
-const DEFAULT_SETTINGS = { accent: 'en-US', voice: '', rate: 0.9, dailyGoal: 30, autoplay: true, listening: true, speaking: true, sounds: true, unlockAll: false };
+const DEFAULT_SETTINGS = { accent: 'en-US', voice: '', rate: 0.9, dailyGoal: 30, autoplay: true, listening: true, speaking: true, sounds: true, unlockAll: false, storyMode: 'hidden', storySlow: false };
 const EMPTY = { box: 0, seen: false, due: 0, ok: 0, ko: 0 };
 
 function load() {
   let s = {};
   try { s = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { /* stockage indisponible */ }
   return {
-    items: {}, xp: 0, streak: 0, bestStreak: 0, lastDay: null, daily: {}, lessons: 0, answers: 0, good: 0, openLevels: {}, fichesSeen: {}, dialogues: {}, custom: [], sounds: {}, badges: {}, perfects: 0, reviews: 0, flags: {},
+    items: {}, xp: 0, streak: 0, bestStreak: 0, lastDay: null, daily: {}, lessons: 0, answers: 0, good: 0, openLevels: {}, fichesSeen: {}, dialogues: {}, custom: [], sounds: {}, badges: {}, perfects: 0, reviews: 0, flags: {}, stories: {},
     ...s,
     settings: { ...DEFAULT_SETTINGS, ...(s.settings || {}) },
   };
@@ -182,6 +182,9 @@ const BADGES = [
   { id: 'dialogAll', icon: '🎙️', name: 'Maître de la conversation', desc: 'Réussir tous les mini-dialogues', test: () => dialoguesDone() >= DIALOGUES.length },
   { id: 'ear', icon: '👂', name: 'Oreille fine', desc: 'Faire 10/10 à un entraînement de sons', test: s => Object.values(s.sounds).some(v => v >= 10) },
   { id: 'earAll', icon: '🦻', name: 'Oreille absolue', desc: 'Faire 10/10 à tous les sons difficiles', test: s => SOUNDS.every(g => s.sounds[g.id] >= 10) },
+  { id: 'story1', icon: '🎧', name: 'Bonne écoute', desc: 'Terminer une mini-histoire', test: s => Object.keys(s.stories).length >= 1 },
+  { id: 'storyPerfect', icon: '🎼', name: 'Tout compris', desc: 'Répondre juste à toutes les questions d’une histoire', test: s => STORIES.some(st => s.stories[st.id] && s.stories[st.id].best === st.questions.length) },
+  { id: 'storiesAll', icon: '📻', name: 'Podcasteur', desc: 'Terminer toutes les mini-histoires', test: s => STORIES.every(st => s.stories[st.id]) },
   { id: 'placement', icon: '🧭', name: 'Explorateur', desc: 'Passer le test de niveau', test: s => !!s.placement },
   { id: 'custom10', icon: '✍️', name: 'Collectionneur', desc: 'Ajouter 10 expressions perso', test: s => s.custom.length >= 10 },
   { id: 'early', icon: '🌅', name: 'Lève-tôt', desc: 'Faire une leçon avant 8 h', test: s => !!s.flags.early },
@@ -763,6 +766,9 @@ function render() {
   else if (screen === 'mywords') app.innerHTML = renderMyWords();
   else if (screen === 'sounds') app.innerHTML = renderSounds();
   else if (screen === 'soundGame') app.innerHTML = renderSoundGame();
+  else if (screen === 'listen') app.innerHTML = renderListen();
+  else if (screen === 'story') { app.innerHTML = renderStory(); drawStory(); }
+  else if (screen === 'storyQuiz') app.innerHTML = renderStoryQuiz();
   else if (screen === 'progress') app.innerHTML = renderProgress();
   else if (screen === 'settings') app.innerHTML = renderSettings();
   else app.innerHTML = renderHome();
@@ -780,7 +786,7 @@ const topbar = () => `
 
 const nav = active => `
   <nav class="bottom-nav">
-    ${[['home', '🏠', 'Apprendre'], ['library', '📖', 'Bibliothèque'], ['progress', '📊', 'Progrès'], ['settings', '⚙️', 'Réglages']].map(([k, i, l]) =>
+    ${[['home', '🏠', 'Apprendre'], ['listen', '🎧', 'Écoute'], ['library', '📖', 'Biblio'], ['progress', '📊', 'Progrès'], ['settings', '⚙️', 'Réglages']].map(([k, i, l]) =>
       `<button class="${active === k ? 'active' : ''}" data-action="nav" data-to="${k}"><span class="nav-icon">${i}</span>${l}</button>`).join('')}
   </nav>`;
 
@@ -1476,6 +1482,7 @@ function renderProgress() {
       ${statTile('🗂️', `${seen.length}/${ALL.length}`, 'expressions vues')}
       ${statTile('💎', mastered, 'maîtrisées')}
       ${statTile('💬', `${Object.values(state.dialogues).filter(x => x.done).length}/${DIALOGUES.length}`, 'dialogues réussis')}
+      ${statTile('🎧', `${Object.keys(state.stories).length}/${STORIES.length}`, 'histoires écoutées')}
     </div>
     <section class="card">
       <strong>Niveaux</strong>
@@ -1596,6 +1603,240 @@ function renderSettings() {
     </section>
   </main>
   ${nav('settings')}`;
+}
+
+/* ---------- Mode écoute : mini-histoires ---------- */
+let P = null; // lecteur : { story, idx, playing, finished, utter, wakeLock }
+let Q = null; // questionnaire : { story, k, score, answer, done }
+const STORY_BY_ID = Object.fromEntries(STORIES.map(s => [s.id, s]));
+const storyMinutes = s => Math.max(1, Math.round(s.lines.reduce((n, l) => n + l[1].split(' ').length, 0) / 110 * 1.4));
+
+function renderListen() {
+  const done = Object.values(state.stories).filter(x => x.done).length;
+  return `${topbar()}
+  <main class="page">
+    <h1>🎧 Écoute</h1>
+    <p class="muted">Des mini-histoires à écouter, idéales dans les transports. Écoute d’abord <b>sans lire le texte</b>, puis réponds aux questions.
+      <br>${done} / ${STORIES.length} histoires terminées.</p>
+    ${LEVELS.map(l => {
+      const list = STORIES.filter(s => s.level === l.id);
+      if (!list.length) return '';
+      return `
+        <section class="card lib-level">
+          <div class="lib-level-head"><span class="level-badge sm" data-l="${l.id}">${l.id}</span><strong>${esc(l.name)}</strong></div>
+          <ul class="lib-list">${list.map(s => {
+            const st = state.stories[s.id];
+            return `
+              <li class="story-row" data-action="openStory" data-id="${s.id}">
+                <span class="lib-icon">${s.icon}</span>
+                <div class="lib-text"><b>${esc(s.title)}</b><span class="muted small">${esc(s.desc)} · ${storyMinutes(s)} min${Object.keys(s.speakers).length > 1 ? ' · dialogue' : ''}</span></div>
+                ${st ? `<span class="chip ${st.best === s.questions.length ? 'chip-done' : ''}">${st.best}/${s.questions.length}</span>` : '<span class="story-play">▶</span>'}
+              </li>`;
+          }).join('')}</ul>
+        </section>`;
+    }).join('')}
+  </main>
+  ${nav('listen')}`;
+}
+
+function openStory(id) {
+  stopStory();
+  P = { story: STORY_BY_ID[id], idx: 0, playing: false, finished: false, utter: null, wakeLock: null };
+  screen = 'story';
+  render();
+}
+
+function renderStory() {
+  const s = P.story, mode = state.settings.storyMode;
+  const modes = [['hidden', '🙈 Masqué'], ['en', '🇬🇧 Texte'], ['fr', '🇫🇷 + Traduction']];
+  return `
+  <div class="lesson story">
+    <header class="lesson-top">
+      <button class="icon-btn" data-action="nav" data-to="listen" title="Retour">✕</button>
+      <div class="bar big"><div id="storyBar" style="width:0%"></div></div>
+      <span class="combo">${s.icon}</span>
+    </header>
+    <main class="lesson-body">
+      <div class="story-head">
+        <span class="level-badge sm" data-l="${s.level}">${s.level}</span>
+        <div><h2>${esc(s.title)}</h2><div class="muted small">${esc(s.desc)}</div></div>
+      </div>
+      <div class="seg">${modes.map(([k, l]) => `<button class="${mode === k ? 'on' : ''}" data-action="storyMode" data-mode="${k}">${l}</button>`).join('')}</div>
+      ${mode === 'hidden' ? '<p class="muted small center">Écoute sans lire. Touche une ligne pour la réécouter.</p>' : ''}
+      <div class="transcript ${mode === 'hidden' ? 'hidden-text' : ''}" id="transcript">
+        ${s.lines.map(([who, en, fr], k) => `
+          <div class="sline ${who === 'B' ? 'alt' : ''}" data-action="storyLine" data-k="${k}">
+            ${Object.keys(s.speakers).length > 1 ? `<span class="who">${esc(s.speakers[who] || who)}</span>` : ''}
+            <span class="sen">${mode === 'hidden' ? esc(en) : clickable(en)}</span>
+            ${mode === 'fr' ? `<span class="sfr">${esc(fr)}</span>` : ''}
+          </div>`).join('')}
+      </div>
+    </main>
+    <footer class="lesson-foot story-foot" id="storyFoot"></footer>
+  </div>`;
+}
+
+function drawStory() {
+  if (screen !== 'story' || !P) return;
+  const s = P.story, n = s.lines.length;
+  $('#storyBar').style.width = `${Math.round((P.finished ? n : P.idx) / n * 100)}%`;
+  $$('.sline').forEach((el, k) => el.classList.toggle('active', k === P.idx && (P.playing || P.idx > 0) && !P.finished));
+  $('#storyFoot').innerHTML = `
+    <div class="player">
+      <button class="pbtn" data-action="storyPrev" title="Phrase précédente">⏮</button>
+      <button class="pbtn main" data-action="storyToggle" title="${P.playing ? 'Pause' : 'Lecture'}">${P.playing ? '⏸' : '▶'}</button>
+      <button class="pbtn" data-action="storyNext" title="Phrase suivante">⏭</button>
+      <button class="pbtn speed ${state.settings.storySlow ? 'on' : ''}" data-action="storySlow" title="Vitesse">${state.settings.storySlow ? '🐢 0,7×' : '1×'}</button>
+    </div>
+    <button class="btn ${P.finished ? 'btn-primary' : 'btn-secondary'} wide" data-action="storyQuiz">❓ Questions (${s.questions.length})</button>`;
+  const active = $('.sline.active');
+  if (active && P.playing) active.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+function speakStoryLine(i) {
+  const s = P.story;
+  if (i >= s.lines.length) {
+    P.playing = false;
+    P.finished = true;
+    P.idx = 0;
+    releaseWakeLock();
+    drawStory();
+    return;
+  }
+  P.idx = i;
+  const [who, en] = s.lines[i];
+  const u = new SpeechSynthesisUtterance(en);
+  const v = who === 'B' ? altVoice() : chooseVoice();
+  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = state.settings.accent;
+  if (who === 'B' && v === chooseVoice()) u.pitch = 1.25;
+  u.rate = state.settings.rate * (state.settings.storySlow ? 0.7 : 1);
+  u.onend = () => {
+    if (!P || P.utter !== u || !P.playing) return;
+    setTimeout(() => { if (P && P.utter === u && P.playing) speakStoryLine(i + 1); }, 450);
+  };
+  P.utter = u;
+  // Sur Android, parler juste après cancel() peut être ignoré : on laisse un court délai
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel();
+    setTimeout(() => { if (P && P.utter === u) speechSynthesis.speak(u); }, 80);
+  } else {
+    speechSynthesis.speak(u);
+  }
+  drawStory();
+}
+
+// Le verrou d'écran saute quand l'appli passe en arrière-plan : on le reprend au retour
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && P && P.playing) { P.wakeLock = null; requestWakeLock(); }
+});
+
+function playStory(from) {
+  if (!window.speechSynthesis) { toast('La lecture audio n’est pas disponible sur ce navigateur'); return; }
+  if (P.finished) P.finished = false;
+  P.playing = true;
+  requestWakeLock();
+  speakStoryLine(from != null ? from : P.idx);
+}
+
+function pauseStory() {
+  if (!P) return;
+  P.playing = false;
+  P.utter = null;
+  window.speechSynthesis && speechSynthesis.cancel();
+  releaseWakeLock();
+  drawStory();
+}
+
+function stopStory() {
+  if (!P) return;
+  pauseStory();
+  P = null;
+}
+
+// Garde l'écran allumé pendant la lecture (sinon le téléphone coupe la voix en se verrouillant)
+async function requestWakeLock() {
+  try { if ('wakeLock' in navigator && P && !P.wakeLock) P.wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { /* non disponible */ }
+}
+function releaseWakeLock() {
+  if (P && P.wakeLock) { P.wakeLock.release().catch(() => {}); P.wakeLock = null; }
+}
+
+/* Questionnaire de compréhension */
+function startStoryQuiz() {
+  const s = P ? P.story : Q.story;
+  if (P) pauseStory();
+  Q = { story: s, k: 0, score: 0, answer: null, done: false };
+  screen = 'storyQuiz';
+  render();
+}
+
+function renderStoryQuiz() {
+  const s = Q.story, total = s.questions.length;
+  if (Q.done) {
+    const perfect = Q.score === total;
+    return `
+    <main class="page result">
+      <div class="trophy">${perfect ? '🏆' : Q.score >= total / 2 ? '🎧' : '💪'}</div>
+      <h1 class="center">${Q.score} / ${total}</h1>
+      <p class="center muted">${perfect ? 'Tout compris, bravo !' : Q.score >= total / 2 ? 'Bonne compréhension !' : 'Réécoute l’histoire avec le texte, puis réessaie.'}<br>+${Q.xp} XP</p>
+      <div class="btn-col">
+        <button class="btn btn-primary wide" data-action="storyRelisten" data-mode="fr">🔁 Réécouter avec la traduction</button>
+        <button class="btn btn-secondary wide" data-action="storyQuiz">Refaire les questions</button>
+        <button class="btn btn-secondary wide" data-action="nav" data-to="listen">Autres histoires</button>
+      </div>
+    </main>`;
+  }
+  const q = s.questions[Q.k], answered = Q.answer != null, ok = Q.answer === q.answer;
+  return `
+  <div class="lesson">
+    <header class="lesson-top">
+      <button class="icon-btn" data-action="storyBack" title="Retour à l’histoire">✕</button>
+      <div class="bar big"><div style="width:${Math.round(Q.k / total * 100)}%"></div></div>
+      <span class="combo">${s.icon}</span>
+    </header>
+    <main class="lesson-body">
+      <div class="placement-tag">❓ ${esc(s.title)} · question ${Q.k + 1}/${total}</div>
+      <h2>${clickable(q.q)}</h2>
+      <p class="muted">${esc(q.fr)}</p>
+      <div class="options">${q.options.map((o, i) => {
+        const cls = !answered ? '' : i === q.answer ? 'correct' : i === Q.answer ? 'wrong' : '';
+        return `<button class="option ${cls}" data-action="storyAnswer" data-i="${i}" ${answered ? 'disabled' : ''}><kbd>${i + 1}</kbd><span>${esc(o)}</span></button>`;
+      }).join('')}</div>
+    </main>
+    <footer class="lesson-foot">
+      ${answered ? `
+        <div class="feedback ${ok ? 'ok' : 'ko'}">
+          <div class="fb-text"><div class="fb-title">${ok ? pick(PRAISE) : 'Pas tout à fait…'}</div>${ok ? '' : `<div class="small">Bonne réponse : <b>${esc(q.options[q.answer])}</b></div>`}</div>
+          <div class="fb-actions"><button class="btn ${ok ? 'btn-primary' : 'btn-danger'}" data-action="storyQNext">Continuer</button></div>
+        </div>` : '<div class="foot-row"><span class="muted small">Choisis la bonne réponse.</span></div>'}
+    </footer>
+  </div>`;
+}
+
+function storyAnswer(i) {
+  if (!Q || Q.done || Q.answer != null) return;
+  Q.answer = i;
+  const ok = i === Q.story.questions[Q.k].answer;
+  if (ok) Q.score++;
+  beep(ok);
+  render();
+}
+
+function storyQNext() {
+  if (!Q || Q.answer == null) return;
+  Q.k++;
+  Q.answer = null;
+  if (Q.k >= Q.story.questions.length) {
+    Q.done = true;
+    Q.xp = 5 + Q.score * 2;
+    const prev = state.stories[Q.story.id];
+    state.stories[Q.story.id] = { done: true, best: Math.max(prev ? prev.best : 0, Q.score) };
+    addXp(Q.xp);
+    render();
+    checkBadges();
+    return;
+  }
+  render();
 }
 
 /* ---------- Installation (PWA) ---------- */
@@ -1759,8 +2000,20 @@ function importData(file) {
 const actions = {
   nav: el => {
     window.speechSynthesis && speechSynthesis.cancel();
-    screen = el.dataset.to; L = null; D = null; F = null; S = null; render();
+    screen = el.dataset.to; L = null; D = null; F = null; S = null; stopStory(); render();
   },
+  openStory: el => openStory(el.dataset.id),
+  storyToggle: () => { if (P.playing) pauseStory(); else playStory(); },
+  storyPrev: () => { const i = Math.max(0, P.idx - 1); if (P.playing) playStory(i); else { P.idx = i; P.finished = false; drawStory(); } },
+  storyNext: () => { const i = Math.min(P.story.lines.length - 1, P.idx + 1); if (P.playing) playStory(i); else { P.idx = i; P.finished = false; drawStory(); } },
+  storyLine: el => playStory(+el.dataset.k),
+  storySlow: () => { state.settings.storySlow = !state.settings.storySlow; save(); if (P.playing) playStory(P.idx); else drawStory(); },
+  storyMode: el => { state.settings.storyMode = el.dataset.mode; save(); render(); },
+  storyQuiz: () => startStoryQuiz(),
+  storyAnswer: el => storyAnswer(+el.dataset.i),
+  storyQNext: () => storyQNext(),
+  storyBack: () => { const id = Q.story.id; Q = null; openStory(id); },
+  storyRelisten: el => { state.settings.storyMode = el.dataset.mode; save(); const id = Q.story.id; Q = null; openStory(id); },
   myAdd: () => addCustom(),
   myListen: () => { const en = $('#myEn').value.trim(); if (en) speak(en); else toast('Écris d’abord l’expression en anglais'); },
   myDel: el => {
@@ -1920,6 +2173,16 @@ document.addEventListener('keydown', e => {
   if (screen === 'mywords' && e.key === 'Enter' && e.target.tagName === 'INPUT') {
     e.preventDefault();
     addCustom();
+    return;
+  }
+  if (screen === 'story' && P && e.key === ' ') {
+    e.preventDefault();
+    actions.storyToggle();
+    return;
+  }
+  if (screen === 'storyQuiz' && Q && !Q.done) {
+    if (Q.answer == null && /^[1-3]$/.test(e.key)) storyAnswer(Number(e.key) - 1);
+    else if (Q.answer != null && e.key === 'Enter') { e.preventDefault(); storyQNext(); }
     return;
   }
   if (screen === 'soundGame' && S && !S.done) {

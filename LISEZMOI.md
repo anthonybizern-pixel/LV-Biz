@@ -21,12 +21,13 @@ Rappel sur téléphone : **Réglages › Rappel quotidien › Ajouter à mon age
 - 12 thèmes à la carte, accessibles à tout moment : faux amis, entretien d'embauche, aéroport et hôtel, tech, anglais des séries, restaurant, transports, small talk, urgences, logement, banque, réunions et présentations
 - **Mes expressions** : ajoute tes propres mots, ils entrent dans les leçons et les révisions (conservés même si tu réinitialises ta progression)
 - **Sons difficiles** : entraînement à l'oreille sur les paires piégeuses (ship/sheep, think/sink, hair/air…)
+- **🎧 Écoute** : 12 mini-histoires audio (A1 à C1) avec lecteur (pause, phrase par phrase, ralenti), texte masqué, en anglais ou traduit, et questions de compréhension. L'écran reste allumé pendant la lecture
 - Test de niveau (2 à 5 min) pour savoir où commencer, ou bouton « Commencer au niveau… » pour sauter directement à un niveau
 - 41 fiches de grammaire (une par unité), affichées avant la première leçon et relisibles à tout moment
 - 41 mini-dialogues : un personnage te parle, tu choisis ta réplique ; chaque erreur classique est expliquée
 - Onglet **Bibliothèque** qui regroupe fiches et dialogues
 - **Touche un mot anglais** (fiches, dialogues, leçons, vocabulaire) pour voir son sens, l'écouter et le revoir dans le cours
-- **35 badges** à débloquer (séries, leçons sans faute, niveaux terminés, dialogues, oreille fine…), visibles dans Progrès
+- **38 badges** à débloquer (séries, leçons sans faute, niveaux terminés, dialogues, oreille fine…), visibles dans Progrès
 - Exercices variés : QCM, traduction écrite, phrases à reconstruire, dictée, paires à associer, prononciation au micro
 - Répétition espacée : les expressions reviennent en révision au bon moment (1, 2, 4, 8, 16 jours…)
 - XP, série de jours, objectif quotidien, statistiques et liste de ton vocabulaire
@@ -49,5 +50,5 @@ Ouvre `data.js` et ajoute des lignes `["anglais", "français", ["autres réponse
 à la fin d'une unité, ou une nouvelle unité (avec `level: "A1"` à `"C1"`, et `theme: true` pour un thème à la carte) à la fin de la liste.
 
 Les fiches de grammaire sont dans `grammar.js`, les dialogues dans `dialogues.js` et
-les paires de sons dans `sounds.js` et le dictionnaire des mots dans `lexicon.js` ;
+les paires de sons dans `sounds.js`, les mini-histoires dans `stories.js` et le dictionnaire dans `lexicon.js` ;
 le format est expliqué en haut de chaque fichier.

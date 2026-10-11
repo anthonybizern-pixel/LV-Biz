@@ -2,7 +2,7 @@
 // Stratégie : on répond tout de suite avec la version en cache, puis on la met à jour en arrière-plan.
 // Après une modification des fichiers, incrémenter VERSION force un rechargement complet du cache.
 
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `english-coach-${VERSION}`;
 const FILES = [
   './',
@@ -13,6 +13,7 @@ const FILES = [
   'grammar.js',
   'dialogues.js',
   'sounds.js',
+  'stories.js',
   'lexicon.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
