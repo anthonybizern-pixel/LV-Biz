@@ -2,7 +2,7 @@
 // Stratégie : on répond tout de suite avec la version en cache, puis on la met à jour en arrière-plan.
 // Après une modification des fichiers, incrémenter VERSION force un rechargement complet du cache.
 
-const VERSION = 'v4';
+const VERSION = 'v5';
 const CACHE = `english-coach-${VERSION}`;
 const LANG_FILES = ['config', 'data', 'grammar', 'dialogues', 'sounds', 'stories', 'lexicon'];
 const FILES = [
@@ -11,7 +11,7 @@ const FILES = [
   'style.css',
   'boot.js',
   'app.js',
-  ...['en', 'ca'].flatMap(code => LANG_FILES.map(f => `lang/${code}/${f}.js`)),
+  ...['en', 'ca', 'de'].flatMap(code => LANG_FILES.map(f => `lang/${code}/${f}.js`)),
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',

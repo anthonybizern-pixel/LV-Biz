@@ -234,6 +234,7 @@ function celebrate(list) {
 function norm(s, keepAccents = false) {
   const contractions = LANG.contractions || {}, numbers = LANG.numbers || {};
   let t = String(s).toLowerCase();
+  if (LANG.preNorm) t = LANG.preNorm(t); // ex. allemand : ä → ae, ß → ss
   if (!keepAccents) t = fold(t);
   return t
     .replace(/[’‘`´]/g, "'")

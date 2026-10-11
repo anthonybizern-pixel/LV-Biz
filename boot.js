@@ -5,6 +5,7 @@
 const LANGS = [
   { code: 'en', label: 'Anglais', native: 'English', flag: '<span class="flag-uk" aria-hidden="true"></span>' },
   { code: 'ca', label: 'Catalan', native: 'Català', flag: '<span class="flag-ca" aria-hidden="true"></span>' },
+  { code: 'de', label: 'Allemand', native: 'Deutsch', flag: '<span class="flag-de" aria-hidden="true"></span>' },
 ];
 window.LANGS = LANGS; // utilisé par app.js (menu des langues, import)
 const LANG_FILES = ['config', 'data', 'grammar', 'dialogues', 'sounds', 'stories', 'lexicon'];

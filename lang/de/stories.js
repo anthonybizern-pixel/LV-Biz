@@ -1,0 +1,260 @@
+// Mini-histoires audio en allemand (mode Écoute).
+// lines : [locuteur, "allemand", "français"]. Locuteurs : "N" = narrateur, "A" = voix principale, "B" = seconde voix.
+// speakers : nom affiché pour chaque locuteur. questions : réponse = index de la bonne option.
+
+const STORIES = [
+  /* ---------- A1 ---------- */
+  {
+    id: "s1", level: "A1", icon: "⏰", title: "Toms Morgen", desc: "Une routine bien réglée",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "Tom steht jeden Morgen um sieben Uhr auf.", "Tom se lève tous les matins à sept heures."],
+      ["N", "Zuerst duscht er und zieht sich an.", "D'abord, il se douche et s'habille."],
+      ["N", "Dann macht er sich einen Kaffee in der Küche.", "Ensuite, il se fait un café dans la cuisine."],
+      ["N", "Zum Frühstück isst er ein Brötchen mit Marmelade.", "Au petit-déjeuner, il mange un petit pain avec de la confiture."],
+      ["N", "Um acht Uhr nimmt er die S-Bahn zur Arbeit.", "À huit heures, il prend le train de banlieue pour aller au travail."],
+      ["N", "Die S-Bahn ist immer voll, deshalb liest er auf seinem Handy.", "Le train est toujours plein, alors il lit sur son portable."],
+      ["N", "Tom arbeitet in einem kleinen Büro in der Innenstadt von Köln.", "Tom travaille dans un petit bureau au centre de Cologne."],
+      ["N", "Er mag seine Arbeit, aber montags ist er immer müde!", "Il aime son travail, mais le lundi il est toujours fatigué !"],
+    ],
+    questions: [
+      { q: "Um wie viel Uhr steht Tom auf?", fr: "À quelle heure Tom se lève-t-il ?", options: ["Um sechs Uhr", "Um sieben Uhr", "Um acht Uhr"], answer: 1 },
+      { q: "Wie fährt Tom zur Arbeit?", fr: "Comment Tom va-t-il au travail ?", options: ["Mit dem Auto", "Mit der S-Bahn", "Mit dem Fahrrad"], answer: 1 },
+      { q: "Was isst Tom zum Frühstück?", fr: "Que mange Tom au petit-déjeuner ?", options: ["Eier", "Nichts", "Ein Brötchen mit Marmelade"], answer: 2 },
+    ],
+  },
+  {
+    id: "s2", level: "A1", icon: "🥨", title: "In der Bäckerei", desc: "Lisa achète son petit-déjeuner",
+    speakers: { A: "Lisa", B: "Die Verkäuferin" },
+    lines: [
+      ["B", "Guten Morgen! Was darf's sein?", "Bonjour ! Qu'est-ce que ce sera ?"],
+      ["A", "Guten Morgen! Ich hätte gern zwei Brötchen, bitte.", "Bonjour ! Je voudrais deux petits pains, s'il vous plaît."],
+      ["B", "Gern. Sonst noch etwas?", "Volontiers. Autre chose ?"],
+      ["A", "Ja, eine Brezel und ein Stück Apfelkuchen.", "Oui, un bretzel et une part de gâteau aux pommes."],
+      ["B", "Tut mir leid, der Apfelkuchen ist schon aus. Wir haben noch Käsekuchen.", "Désolée, il n'y a plus de gâteau aux pommes. Il nous reste du gâteau au fromage blanc."],
+      ["A", "Okay, dann ein Stück Käsekuchen.", "D'accord, alors une part de gâteau au fromage blanc."],
+      ["B", "Zum Mitnehmen?", "À emporter ?"],
+      ["A", "Ja, bitte. Was macht das?", "Oui, s'il vous plaît. Ça fait combien ?"],
+      ["B", "Das macht fünf Euro fünfzig.", "Ça fait cinq euros cinquante."],
+      ["A", "Hier, bitte. Schönen Tag noch!", "Voici. Bonne journée !"],
+    ],
+    questions: [
+      { q: "Wie viele Brötchen kauft Lisa?", fr: "Combien de petits pains Lisa achète-t-elle ?", options: ["Eins", "Zwei", "Drei"], answer: 1 },
+      { q: "Warum kauft sie keinen Apfelkuchen?", fr: "Pourquoi n'achète-t-elle pas de gâteau aux pommes ?", options: ["Er ist schon aus", "Er ist zu teuer", "Sie mag keine Äpfel"], answer: 0 },
+      { q: "Wie viel bezahlt sie?", fr: "Combien paie-t-elle ?", options: ["Fünf Euro fünfzig", "Fünf Euro fünfzehn", "Fünfzehn Euro fünfzig"], answer: 0 },
+    ],
+  },
+  {
+    id: "s3", level: "A1", icon: "👨‍👩‍👧‍👦", title: "Annas Familie", desc: "Anna se présente",
+    speakers: { N: "Anna" },
+    lines: [
+      ["N", "Hallo! Ich heiße Anna und bin zweiunddreißig Jahre alt.", "Salut ! Je m'appelle Anna et j'ai trente-deux ans."],
+      ["N", "Ich wohne mit meinem Mann Jan und unseren zwei Kindern in Leipzig.", "J'habite à Leipzig avec mon mari Jan et nos deux enfants."],
+      ["N", "Unser Sohn Ben ist acht, und unsere Tochter Mia ist fünf.", "Notre fils Ben a huit ans, et notre fille Mia en a cinq."],
+      ["N", "Jan ist Krankenpfleger und arbeitet im Krankenhaus.", "Jan est infirmier et travaille à l'hôpital."],
+      ["N", "Ich bin Lehrerin an einer Grundschule.", "Je suis institutrice dans une école primaire."],
+      ["N", "Meine Eltern wohnen in Bayern, deshalb sehen wir sie nicht oft.", "Mes parents habitent en Bavière, c'est pourquoi nous ne les voyons pas souvent."],
+      ["N", "Aber jeden Sommer besuchen wir sie zwei Wochen lang.", "Mais chaque été, nous leur rendons visite pendant deux semaines."],
+      ["N", "Die Kinder lieben das, denn mein Vater hat einen großen Hund!", "Les enfants adorent ça, car mon père a un grand chien !"],
+    ],
+    questions: [
+      { q: "Wie viele Kinder hat Anna?", fr: "Combien d'enfants Anna a-t-elle ?", options: ["Eins", "Zwei", "Drei"], answer: 1 },
+      { q: "Was ist Jan von Beruf?", fr: "Quel est le métier de Jan ?", options: ["Lehrer", "Arzt", "Krankenpfleger"], answer: 2 },
+      { q: "Warum lieben die Kinder die Besuche bei den Großeltern?", fr: "Pourquoi les enfants adorent-ils aller chez leurs grands-parents ?", options: ["Wegen des Strandes", "Wegen des Hundes", "Wegen der Geschenke"], answer: 1 },
+    ],
+  },
+
+  /* ---------- A2 ---------- */
+  {
+    id: "s4", level: "A2", icon: "⚓", title: "Ein Wochenende in Hamburg", desc: "Julia et Nadia visitent Hambourg",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "Letztes Wochenende ist Julia mit ihrer besten Freundin Nadia nach Hamburg gefahren.", "Le week-end dernier, Julia est partie à Hambourg avec sa meilleure amie Nadia."],
+      ["N", "Sie sind am Freitagabend mit dem Zug gefahren.", "Elles sont parties en train le vendredi soir."],
+      ["N", "Am Samstagmorgen haben sie eine Hafenrundfahrt gemacht.", "Le samedi matin, elles ont fait un tour du port en bateau."],
+      ["N", "Am Nachmittag hat es angefangen zu regnen, also sind sie ins Museum gegangen.", "L'après-midi, il s'est mis à pleuvoir, alors elles sont allées au musée."],
+      ["N", "Julia hat sich im Museumsshop einen roten Regenschirm gekauft.", "Julia s'est acheté un parapluie rouge à la boutique du musée."],
+      ["N", "Am Abend haben sie in einem kleinen Restaurant Fisch gegessen.", "Le soir, elles ont mangé du poisson dans un petit restaurant."],
+      ["N", "Am Sonntag war das Wetter wunderschön, und sie sind an der Elbe spazieren gegangen.", "Dimanche, il faisait un temps magnifique, et elles se sont promenées au bord de l'Elbe."],
+      ["N", "Sie sind müde, aber sehr glücklich nach Hause gekommen.", "Elles sont rentrées fatiguées mais très heureuses."],
+    ],
+    questions: [
+      { q: "Wie sind Julia und Nadia nach Hamburg gefahren?", fr: "Comment Julia et Nadia sont-elles allées à Hambourg ?", options: ["Mit dem Flugzeug", "Mit dem Zug", "Mit dem Auto"], answer: 1 },
+      { q: "Was haben sie gemacht, als es geregnet hat?", fr: "Qu'ont-elles fait quand il a plu ?", options: ["Sie sind ins Kino gegangen", "Sie sind ins Hotel gegangen", "Sie sind ins Museum gegangen"], answer: 2 },
+      { q: "Was hat Julia gekauft?", fr: "Qu'a acheté Julia ?", options: ["Ein Buch", "Einen roten Regenschirm", "Eine Tasche"], answer: 1 },
+      { q: "Wie war das Wetter am Sonntag?", fr: "Quel temps a-t-il fait dimanche ?", options: ["Wunderschön", "Regnerisch", "Kalt"], answer: 0 },
+    ],
+  },
+  {
+    id: "s5", level: "A2", icon: "🛫", title: "Verlaufen am Flughafen", desc: "Marc cherche sa porte d'embarquement",
+    speakers: { A: "Marc", B: "Die Mitarbeiterin" },
+    lines: [
+      ["A", "Entschuldigung, ich glaube, ich habe mich verlaufen. Ich muss zum Gate zweiundzwanzig.", "Excusez-moi, je crois que je me suis perdu. Je dois aller à la porte vingt-deux."],
+      ["B", "Darf ich Ihre Bordkarte sehen? … Ihr Flug geht von Terminal 2.", "Puis-je voir votre carte d'embarquement ? … Votre vol part du terminal 2."],
+      ["A", "Terminal 2? Aber das hier ist Terminal 1!", "Le terminal 2 ? Mais ici, c'est le terminal 1 !"],
+      ["B", "Keine Sorge. Es gibt einen kostenlosen Shuttlezug. Er fährt alle fünf Minuten.", "Pas d'inquiétude. Il y a une navette gratuite. Elle passe toutes les cinq minutes."],
+      ["A", "Wo kann ich ihn nehmen?", "Où est-ce que je peux la prendre ?"],
+      ["B", "Gehen Sie die Treppe hinunter und dann nach rechts. Dort sehen Sie die Schilder.", "Descendez l'escalier, puis allez à droite. Là, vous verrez les panneaux."],
+      ["A", "Wie lange dauert das?", "Combien de temps ça prend ?"],
+      ["B", "Ungefähr zehn Minuten. Ihr Flug geht erst um elf, Sie haben also genug Zeit.", "Environ dix minutes. Votre vol ne part qu'à onze heures, vous avez donc assez de temps."],
+      ["A", "Vielen herzlichen Dank!", "Merci infiniment !"],
+    ],
+    questions: [
+      { q: "Zu welchem Gate muss Marc?", fr: "À quelle porte Marc doit-il aller ?", options: ["Zwölf", "Zweiundzwanzig", "Zwanzig"], answer: 1 },
+      { q: "Wie kommt er zu Terminal 2?", fr: "Comment va-t-il au terminal 2 ?", options: ["Mit dem Taxi", "Zu Fuß", "Mit einem kostenlosen Shuttlezug"], answer: 2 },
+      { q: "Wie oft fährt der Shuttlezug?", fr: "À quelle fréquence passe la navette ?", options: ["Alle fünf Minuten", "Alle zehn Minuten", "Jede Stunde"], answer: 0 },
+    ],
+  },
+  {
+    id: "s6", level: "A2", icon: "🧑‍💻", title: "Der neue Kollege", desc: "Premier jour au bureau pour Raj",
+    speakers: { A: "Emma", B: "Raj" },
+    lines: [
+      ["A", "Hallo, du bist bestimmt der neue Entwickler. Ich bin Emma aus dem Marketing.", "Salut, tu dois être le nouveau développeur. Moi, c'est Emma, du marketing."],
+      ["B", "Hallo Emma, freut mich! Ja, ich bin Raj. Heute ist mein erster Tag.", "Salut Emma, enchanté ! Oui, je suis Raj. C'est mon premier jour aujourd'hui."],
+      ["A", "Willkommen! Wie war die Fahrt heute Morgen?", "Bienvenue ! Comment s'est passé le trajet ce matin ?"],
+      ["B", "Nicht so toll. Der Zug hatte Verspätung, und ich musste die ganze Zeit stehen.", "Pas génial. Le train avait du retard, et j'ai dû rester debout tout le temps."],
+      ["A", "Das passiert oft auf dieser Strecke. Einige von uns kommen mit dem Fahrrad.", "Ça arrive souvent sur cette ligne. Certains d'entre nous viennent à vélo."],
+      ["B", "Gute Idee. Gibt es hier einen Fahrradständer?", "Bonne idée. Il y a un parking à vélos ici ?"],
+      ["A", "Ja, hinter dem Gebäude.", "Oui, derrière le bâtiment."],
+      ["A", "Übrigens, freitags essen wir oft zusammen zu Mittag. Kommst du mit?", "Au fait, le vendredi, on déjeune souvent ensemble. Tu viens ?"],
+      ["B", "Sehr gern. Danke, Emma!", "Avec grand plaisir. Merci, Emma !"],
+    ],
+    questions: [
+      { q: "Was ist Raj von Beruf?", fr: "Quel est le métier de Raj ?", options: ["Er ist Entwickler", "Er arbeitet im Marketing", "Er ist der Chef"], answer: 0 },
+      { q: "Warum war die Fahrt nicht so toll?", fr: "Pourquoi le trajet n'a-t-il pas été génial ?", options: ["Er hat sich verlaufen", "Der Zug hatte Verspätung", "Sein Fahrrad war kaputt"], answer: 1 },
+      { q: "Wann essen die Kollegen zusammen zu Mittag?", fr: "Quand les collègues déjeunent-ils ensemble ?", options: ["Montags", "Jeden Tag", "Freitags"], answer: 2 },
+    ],
+  },
+
+  /* ---------- B1 ---------- */
+  {
+    id: "s7", level: "B1", icon: "🏨", title: "Das enttäuschende Hotel", desc: "Des vacances qui commencent mal",
+    speakers: { N: "Ben" },
+    lines: [
+      ["N", "Als wir im Hotel ankamen, wusste ich sofort, dass etwas nicht stimmte.", "Quand nous sommes arrivés à l'hôtel, j'ai tout de suite su que quelque chose n'allait pas."],
+      ["N", "Auf den Fotos im Internet sah man ein modernes Gebäude mit Pool.", "Sur les photos en ligne, on voyait un bâtiment moderne avec piscine."],
+      ["N", "In Wirklichkeit war das Gebäude alt, und der Pool war seit Monaten geschlossen.", "En réalité, le bâtiment était vieux, et la piscine était fermée depuis des mois."],
+      ["N", "Unser Zimmer war winzig, und das Fenster ging auf einen Parkplatz.", "Notre chambre était minuscule, et la fenêtre donnait sur un parking."],
+      ["N", "Noch schlimmer: Die Klimaanlage funktionierte nicht, und draußen waren es fünfunddreißig Grad.", "Pire encore : la climatisation ne marchait pas, et dehors il faisait trente-cinq degrés."],
+      ["N", "Ich ging zur Rezeption und beschwerte mich, höflich, aber bestimmt.", "Je suis allé à la réception et je me suis plaint, poliment mais fermement."],
+      ["N", "Der Manager entschuldigte sich und bot uns ein anderes Zimmer im obersten Stock an.", "Le directeur s'est excusé et nous a proposé une autre chambre au dernier étage."],
+      ["N", "Es hatte einen Balkon mit Meerblick, also waren wir am Ende ziemlich zufrieden.", "Elle avait un balcon avec vue sur la mer, donc finalement nous étions plutôt contents."],
+      ["N", "Was ich daraus gelernt habe: immer die Bewertungen lesen, nicht nur die Fotos anschauen!", "Ce que j'en ai retenu : toujours lire les avis, pas seulement regarder les photos !"],
+    ],
+    questions: [
+      { q: "Was war mit dem Pool?", fr: "Quel était le problème de la piscine ?", options: ["Er war schmutzig", "Er war geschlossen", "Er war zu klein"], answer: 1 },
+      { q: "Welches Problem hatte das Zimmer?", fr: "Quel problème avait la chambre ?", options: ["Die Klimaanlage funktionierte nicht", "Die Dusche war kaputt", "Es war sehr laut"], answer: 0 },
+      { q: "Wie hat der Manager das Problem gelöst?", fr: "Comment le directeur a-t-il réglé le problème ?", options: ["Er hat das Geld zurückgegeben", "Er hat ein anderes Zimmer angeboten", "Er hat die Klimaanlage repariert"], answer: 1 },
+      { q: "Welchen Rat gibt Ben?", fr: "Quel conseil Ben donne-t-il ?", options: ["Früh buchen", "Immer die Bewertungen lesen", "Nie im Sommer reisen"], answer: 1 },
+    ],
+  },
+  {
+    id: "s8", level: "B1", icon: "🤝", title: "Das Vorstellungsgespräch", desc: "Lucas postule dans une entreprise internationale",
+    speakers: { A: "Lucas", B: "Frau Meier" },
+    lines: [
+      ["B", "Danke, dass Sie gekommen sind, Herr Dubois. Erzählen Sie mir etwas über Ihren Werdegang.", "Merci d'être venu, M. Dubois. Parlez-moi de votre parcours."],
+      ["A", "Gern. Ich habe in Lyon Marketing studiert und arbeite seit vier Jahren bei einem Reiseunternehmen.", "Volontiers. J'ai étudié le marketing à Lyon, et je travaille depuis quatre ans dans une entreprise de voyages."],
+      ["B", "Und warum interessieren Sie sich für diese Stelle?", "Et pourquoi ce poste vous intéresse-t-il ?"],
+      ["A", "Ich möchte in einem internationalen Team arbeiten, und ich bewundere Ihre Produkte sehr.", "J'aimerais travailler dans une équipe internationale, et j'admire beaucoup vos produits."],
+      ["B", "Was würden Sie als Ihre größte Schwäche bezeichnen?", "Que considérez-vous comme votre plus grande faiblesse ?"],
+      ["A", "Es fällt mir manchmal schwer, Nein zu sagen, deshalb übernehme ich zu viel Arbeit.", "J'ai parfois du mal à dire non, c'est pourquoi je prends trop de travail."],
+      ["A", "Aber ich habe gelernt, Prioritäten zu setzen und um Hilfe zu bitten, wenn ich sie brauche.", "Mais j'ai appris à établir des priorités et à demander de l'aide quand j'en ai besoin."],
+      ["B", "Das ist eine sehr ehrliche Antwort. Wann könnten Sie anfangen?", "C'est une réponse très honnête. Quand pourriez-vous commencer ?"],
+      ["A", "Ich habe eine Kündigungsfrist von einem Monat, also ab dem ersten März.", "J'ai un préavis d'un mois, donc à partir du premier mars."],
+    ],
+    questions: [
+      { q: "Seit wann arbeitet Lucas bei dem Reiseunternehmen?", fr: "Depuis quand Lucas travaille-t-il dans l'entreprise de voyages ?", options: ["Seit zwei Jahren", "Seit vier Jahren", "Seit sechs Jahren"], answer: 1 },
+      { q: "Warum möchte er diese Stelle?", fr: "Pourquoi veut-il ce poste ?", options: ["Für ein höheres Gehalt", "Um in einem internationalen Team zu arbeiten", "Um in Berlin zu wohnen"], answer: 1 },
+      { q: "Was ist seine Schwäche?", fr: "Quel est son point faible ?", options: ["Er kommt oft zu spät", "Es fällt ihm schwer, Nein zu sagen", "Er arbeitet nicht gern im Team"], answer: 1 },
+      { q: "Wann kann er anfangen?", fr: "Quand peut-il commencer ?", options: ["Sofort", "Nächste Woche", "Ab dem ersten März"], answer: 2 },
+    ],
+  },
+  {
+    id: "s9", level: "B1", icon: "🕯️", title: "Der Stromausfall", desc: "Un dîner qui ne se passe pas comme prévu",
+    speakers: { N: "Clara" },
+    lines: [
+      ["N", "Ich kochte gerade für meine Freunde, als plötzlich das Licht ausging.", "J'étais en train de cuisiner pour mes amis quand, soudain, la lumière s'est éteinte."],
+      ["N", "Zuerst dachte ich, es sei nur eine Sicherung, aber die ganze Straße war dunkel.", "Au début, j'ai pensé que c'était juste un fusible, mais toute la rue était dans le noir."],
+      ["N", "Meine Gäste sollten in zwanzig Minuten kommen, und das Hähnchen war erst halb gar.", "Mes invités devaient arriver dans vingt minutes, et le poulet n'était qu'à moitié cuit."],
+      ["N", "Ich blieb ruhig, zündete ein paar Kerzen an und rief die Pizzeria nebenan an.", "Je suis restée calme, j'ai allumé quelques bougies et j'ai appelé la pizzeria d'à côté."],
+      ["N", "Leider funktionierten ihre Öfen auch nicht!", "Malheureusement, leurs fours ne marchaient pas non plus !"],
+      ["N", "Als meine Freunde kamen, aßen wir Brot, Käse und Salat bei Kerzenlicht.", "Quand mes amis sont arrivés, nous avons mangé du pain, du fromage et de la salade à la lueur des bougies."],
+      ["N", "Wir spielten Karten und erzählten uns stundenlang Geschichten.", "Nous avons joué aux cartes et nous nous sommes raconté des histoires pendant des heures."],
+      ["N", "Um Mitternacht kam der Strom zurück, genau als alle gingen.", "À minuit, le courant est revenu, juste au moment où tout le monde partait."],
+      ["N", "Das Lustigste ist: Alle sagten, es war die beste Party, die ich je gemacht habe!", "Le plus drôle : tous ont dit que c'était la meilleure soirée que j'aie jamais organisée !"],
+    ],
+    questions: [
+      { q: "Was machte Clara, als das Licht ausging?", fr: "Que faisait Clara quand la lumière s'est éteinte ?", options: ["Sie schlief", "Sie kochte", "Sie sah fern"], answer: 1 },
+      { q: "Warum konnte sie keine Pizza bestellen?", fr: "Pourquoi n'a-t-elle pas pu commander de pizza ?", options: ["Die Pizzeria war geschlossen", "Die Öfen funktionierten nicht", "Ihr Telefon ging nicht"], answer: 1 },
+      { q: "Was aßen sie am Ende?", fr: "Qu'ont-ils mangé finalement ?", options: ["Hähnchen", "Pizza", "Brot, Käse und Salat"], answer: 2 },
+      { q: "Wann kam der Strom zurück?", fr: "Quand le courant est-il revenu ?", options: ["Um Mitternacht", "Nach zwanzig Minuten", "Am nächsten Morgen"], answer: 0 },
+    ],
+  },
+
+  /* ---------- B2 ---------- */
+  {
+    id: "s10", level: "B2", icon: "📉", title: "Die Krisensitzung", desc: "Un fournisseur fait faillite",
+    speakers: { A: "Sarah", B: "David" },
+    lines: [
+      ["A", "Danke, dass ihr so kurzfristig gekommen seid. Ich fürchte, wir haben ein Problem mit dem Projekt Fischer.", "Merci d'être venus si vite. J'ai bien peur que nous ayons un problème avec le projet Fischer."],
+      ["B", "Schon wieder das Budget?", "Encore le budget ?"],
+      ["A", "Diesmal nicht. Unser Hauptlieferant ist pleite, und die Lieferung wird sich um mindestens drei Wochen verzögern.", "Pas cette fois. Notre principal fournisseur a fait faillite, et la livraison aura au moins trois semaines de retard."],
+      ["B", "Schlechte Nachrichten. Haben wir den Kunden schon informiert?", "Mauvaise nouvelle. Avons-nous déjà informé le client ?"],
+      ["A", "Noch nicht. Ich wollte zuerst mit euch über die Optionen sprechen.", "Pas encore. Je voulais d'abord parler des options avec vous."],
+      ["B", "Wir könnten einen anderen Lieferanten suchen, aber das würde mehr kosten.", "Nous pourrions chercher un autre fournisseur, mais ça coûterait plus cher."],
+      ["A", "Stimmt. Oder wir liefern einen Teil der Bestellung pünktlich und den Rest später.", "C'est vrai. Ou bien nous livrons une partie de la commande à temps et le reste plus tard."],
+      ["B", "Ich glaube, das wäre dem Kunden lieber. Er braucht den ersten Teil für seinen Produktstart.", "Je crois que le client préférerait ça. Il a besoin de la première partie pour le lancement de son produit."],
+      ["A", "Einverstanden. Ich rufe ihn heute Nachmittag an und halte euch auf dem Laufenden.", "D'accord. Je l'appelle cet après-midi et je vous tiens au courant."],
+    ],
+    questions: [
+      { q: "Was ist das Problem?", fr: "Quel est le problème ?", options: ["Das Budget ist zu klein", "Der Hauptlieferant ist pleite", "Der Kunde hat die Bestellung storniert"], answer: 1 },
+      { q: "Wie lange verzögert sich die Lieferung?", fr: "De combien la livraison sera-t-elle retardée ?", options: ["Mindestens drei Wochen", "Drei Tage", "Drei Monate"], answer: 0 },
+      { q: "Welche Lösung wählen sie?", fr: "Quelle solution choisissent-ils ?", options: ["Den Lieferanten wechseln", "Das Projekt abbrechen", "Einen Teil der Bestellung pünktlich liefern"], answer: 2 },
+      { q: "Wer ruft den Kunden an?", fr: "Qui va appeler le client ?", options: ["David", "Sarah", "Niemand"], answer: 1 },
+    ],
+  },
+  {
+    id: "s11", level: "B2", icon: "🥐", title: "Ein neues Leben", desc: "De la banque à la boulangerie",
+    speakers: { N: "Jakob" },
+    lines: [
+      ["N", "Vor fünf Jahren hatte ich einen gut bezahlten Job bei einer Bank in Frankfurt.", "Il y a cinq ans, j'avais un travail bien payé dans une banque à Francfort."],
+      ["N", "Auf dem Papier war alles perfekt, aber ich war überhaupt nicht glücklich.", "Sur le papier, tout était parfait, mais je n'étais pas heureux du tout."],
+      ["N", "Ich arbeitete zwölf Stunden am Tag und sah meine Freunde kaum noch.", "Je travaillais douze heures par jour et je ne voyais presque plus mes amis."],
+      ["N", "Eines Tages fragte ich mich: Wenn ich alles machen könnte, was würde ich tun?", "Un jour, je me suis demandé : si je pouvais tout faire, que ferais-je ?"],
+      ["N", "Die Antwort war einfach: Ich würde eine kleine Bäckerei an der Ostsee eröffnen.", "La réponse était simple : j'ouvrirais une petite boulangerie au bord de la mer Baltique."],
+      ["N", "Meine Familie hielt mich für verrückt, und ehrlich gesagt hatte ich große Angst.", "Ma famille me prenait pour un fou, et pour être honnête, j'avais très peur."],
+      ["N", "Das erste Jahr war sehr hart, und ich hätte zweimal fast aufgegeben.", "La première année a été très dure, et j'ai failli abandonner deux fois."],
+      ["N", "Heute verdiene ich viel weniger Geld, aber ich bin viel glücklicher.", "Aujourd'hui, je gagne beaucoup moins d'argent, mais je suis beaucoup plus heureux."],
+      ["N", "Wäre ich dieses Risiko nicht eingegangen, würde ich mich immer noch fragen: Was wäre, wenn…?", "Si je n'avais pas pris ce risque, je me demanderais encore : et si… ?"],
+    ],
+    questions: [
+      { q: "Warum war Jakob bei der Bank nicht glücklich?", fr: "Pourquoi Jakob n'était-il pas heureux à la banque ?", options: ["Das Gehalt war zu niedrig", "Er arbeitete zu viel und sah seine Freunde kaum", "Sein Chef war unfreundlich"], answer: 1 },
+      { q: "Was hat er beschlossen?", fr: "Qu'a-t-il décidé ?", options: ["Eine Bäckerei an der Ostsee zu eröffnen", "Ins Ausland zu ziehen", "Eine neue Bank zu gründen"], answer: 0 },
+      { q: "Wie hat seine Familie reagiert?", fr: "Comment sa famille a-t-elle réagi ?", options: ["Sie war stolz", "Sie hielt ihn für verrückt", "Sie hat ihm Geld gegeben"], answer: 1 },
+      { q: "Wie fühlt er sich heute?", fr: "Comment se sent-il aujourd'hui ?", options: ["Er bereut seine Entscheidung", "Er ist reicher und glücklicher", "Er verdient weniger, ist aber viel glücklicher"], answer: 2 },
+    ],
+  },
+
+  /* ---------- C1 ---------- */
+  {
+    id: "s12", level: "C1", icon: "🎙️", title: "Der Podcast: Viertagewoche", desc: "Une chercheuse fait le point",
+    speakers: { A: "Der Moderator", B: "Dr. Wagner" },
+    lines: [
+      ["A", "Willkommen zurück! Unser heutiges Thema spaltet die Meinungen: die Viertagewoche.", "Bienvenue à nouveau ! Notre sujet du jour divise : la semaine de quatre jours."],
+      ["A", "Mein Gast ist Dr. Eva Wagner, die sich seit über zehn Jahren mit dieser Frage beschäftigt.", "Mon invitée est la docteure Eva Wagner, qui étudie cette question depuis plus de dix ans."],
+      ["B", "Danke für die Einladung. Zunächst einmal: Die bisherigen Ergebnisse sind erstaunlich positiv.", "Merci pour l'invitation. Tout d'abord : les résultats obtenus jusqu'ici sont étonnamment positifs."],
+      ["B", "In den meisten Studien blieb die Produktivität stabil, während Stress und Krankheitstage deutlich zurückgingen.", "Dans la plupart des études, la productivité est restée stable, tandis que le stress et les arrêts maladie ont nettement diminué."],
+      ["A", "Das klingt fast zu schön, um wahr zu sein. Es gibt doch sicher Nachteile?", "Ça paraît presque trop beau pour être vrai. Il y a sûrement des inconvénients ?"],
+      ["B", "Natürlich. In Büros funktioniert es viel besser als in Krankenhäusern oder Geschäften, wo immer jemand da sein muss.", "Bien sûr. Ça marche bien mieux dans les bureaux que dans les hôpitaux ou les magasins, où quelqu'un doit toujours être présent."],
+      ["B", "Und manche Beschäftigte fanden die längeren Arbeitstage anstrengend.", "Et certains salariés ont trouvé les journées de travail plus longues épuisantes."],
+      ["A", "Würden Sie es also jedem Unternehmen empfehlen?", "Le recommanderiez-vous donc à toutes les entreprises ?"],
+      ["B", "Nicht unbedingt. Entscheidend ist nicht die Anzahl der Tage, sondern wie die Arbeit organisiert ist.", "Pas forcément. Ce qui est décisif, ce n'est pas le nombre de jours, mais la façon dont le travail est organisé."],
+    ],
+    questions: [
+      { q: "Was ist in den meisten Studien mit der Produktivität passiert?", fr: "Qu'est-il arrivé à la productivité dans la plupart des études ?", options: ["Sie ist stark gestiegen", "Sie blieb stabil", "Sie ist gesunken"], answer: 1 },
+      { q: "Wo funktioniert die Viertagewoche am besten?", fr: "Où la semaine de quatre jours marche-t-elle le mieux ?", options: ["In Krankenhäusern", "In Geschäften", "In Büros"], answer: 2 },
+      { q: "Welcher Nachteil wird genannt?", fr: "Quel inconvénient est mentionné ?", options: ["Niedrigere Gehälter", "Manche fanden die längeren Arbeitstage anstrengend", "Kunden haben sich beschwert"], answer: 1 },
+      { q: "Was ist die Hauptaussage von Dr. Wagner?", fr: "Quelle est l'idée principale de Dr Wagner ?", options: ["Jedes Unternehmen sollte sie einführen", "Die Organisation ist wichtiger als die Anzahl der Tage", "Sie funktioniert überhaupt nicht"], answer: 1 },
+    ],
+  },
+];

@@ -542,3 +542,9 @@ body { overscroll-behavior-y: none; }
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30' preserveAspectRatio='none'%3E%3CclipPath id='c'%3E%3Cpath d='M30,15h30v15zv15h-30zh-30v-15zv-15h30z'/%3E%3C/clipPath%3E%3Cpath d='M0,0v30h60v-30z' fill='%23012169'/%3E%3Cpath d='M0,0L60,30M60,0L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0L60,30M60,0L0,30' clip-path='url(%23c)' stroke='%23C8102E' stroke-width='4'/%3E%3Cpath d='M30,0v30M0,15h60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0v30M0,15h60' stroke='%23C8102E' stroke-width='6'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
 .lang-flag .flag-uk { width: 1.4em; height: 1em; }
+.flag-de {
+  display: inline-block; width: 1.35em; height: .95em; border-radius: 3px; vertical-align: -0.1em;
+  background: linear-gradient(180deg, #000 0 33.33%, #dd0000 33.33% 66.66%, #ffce00 66.66%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .08);
+}
+.lang-flag .flag-de { width: 1.4em; height: 1em; }

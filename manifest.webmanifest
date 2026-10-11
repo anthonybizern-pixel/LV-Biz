@@ -1,7 +1,7 @@
 {
   "name": "LV Coach",
   "short_name": "LV Coach",
-  "description": "Ton coach de langues perso : anglais et catalan. Leçons, révisions, dialogues, écoute et prononciation.",
+  "description": "Ton coach de langues perso : anglais, catalan et allemand. Leçons, révisions, dialogues, écoute et prononciation.",
   "lang": "fr",
   "id": "./",
   "start_url": "./",

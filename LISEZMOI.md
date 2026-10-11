@@ -1,6 +1,6 @@
 # LV Coach
 
-Appli perso pour apprendre les langues, **anglais** et **catalan**, sans compte ni abonnement.
+Appli perso pour apprendre les langues, **anglais**, **catalan** et **allemand**, sans compte ni abonnement.
 En ligne : https://anthonybizern-pixel.github.io/LV-Biz/
 
 ## Sur ton téléphone
@@ -12,13 +12,14 @@ Elle s'ouvre alors en plein écran avec son icône et fonctionne **hors connexio
 (sauf l'exercice de prononciation au micro, qui a besoin d'Internet).
 Rappel sur téléphone : **Réglages › Rappel quotidien › Ajouter à mon agenda**.
 
-## Deux langues
+## Trois langues
 - Au premier lancement, l'appli demande quelle langue apprendre. Pour changer ensuite : touche le **drapeau** en haut de l'écran.
 - **Chaque langue a sa propre progression** (XP, série, badges, mots perso). Chaque appareil aussi : une personne = un téléphone.
-- Pour le catalan, il faut une voix catalane sur l'appareil :
-  - Android : Paramètres › Synthèse vocale › Google › installer « Català »
-  - iPhone : Réglages › Accessibilité › Contenu énoncé › Voix › Català
+- Pour le catalan et l'allemand, il faut la voix de la langue sur l'appareil :
+  - Android : Paramètres › Synthèse vocale › Google › installer « Català » / « Deutsch »
+  - iPhone : Réglages › Accessibilité › Contenu énoncé › Voix › Català / Deutsch
 - En catalan, une faute d'accent est signalée sans compter la réponse fausse (és / es, més / mes…).
+- En allemand, sans clavier allemand on peut taper **ae, oe, ue, ss** à la place de **ä, ö, ü, ß** : c'est accepté.
 
 ## Ce qu'il y a dedans (pour chaque langue)
 - 5 niveaux (A1 Débutant → C1 Autonome) et 12 thèmes à la carte (voyage, travail, restaurant, urgences, banque…)
@@ -34,7 +35,7 @@ Rappel sur téléphone : **Réglages › Rappel quotidien › Ajouter à mon age
 
 ## Organisation des fichiers
 - `boot.js` choisit la langue puis charge son contenu ; `app.js` contient toute l'appli.
-- `lang/en/` et `lang/ca/` contiennent le contenu de chaque langue :
+- `lang/en/`, `lang/ca/` et `lang/de/` contiennent le contenu de chaque langue :
   `config.js` (voix, règles de la langue), `data.js` (leçons), `grammar.js` (fiches), `dialogues.js`,
   `stories.js` (mode écoute), `sounds.js` (sons difficiles), `lexicon.js` (sens des mots).
 - Pour ajouter des expressions : ajoute des lignes `["phrase", "traduction", ["autres réponses acceptées"]]`
