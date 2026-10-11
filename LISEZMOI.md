@@ -18,12 +18,12 @@ Rappel sur téléphone : **Réglages › Rappel quotidien › Ajouter à mon age
 
 ## Ce qu'il y a dedans
 - 5 niveaux (A1 Débutant → C1 Autonome), 29 unités du parcours, du « Hello » à l'inversion et au registre soutenu
-- 5 thèmes à la carte, accessibles à tout moment : faux amis, entretien d'embauche, aéroport et hôtel, tech, anglais des séries
+- 12 thèmes à la carte, accessibles à tout moment : faux amis, entretien d'embauche, aéroport et hôtel, tech, anglais des séries, restaurant, transports, small talk, urgences, logement, banque, réunions et présentations
 - **Mes expressions** : ajoute tes propres mots, ils entrent dans les leçons et les révisions (conservés même si tu réinitialises ta progression)
 - **Sons difficiles** : entraînement à l'oreille sur les paires piégeuses (ship/sheep, think/sink, hair/air…)
 - Test de niveau (2 à 5 min) pour savoir où commencer, ou bouton « Commencer au niveau… » pour sauter directement à un niveau
-- 34 fiches de grammaire (une par unité), affichées avant la première leçon et relisibles à tout moment
-- 34 mini-dialogues : un personnage te parle, tu choisis ta réplique ; chaque erreur classique est expliquée
+- 41 fiches de grammaire (une par unité), affichées avant la première leçon et relisibles à tout moment
+- 41 mini-dialogues : un personnage te parle, tu choisis ta réplique ; chaque erreur classique est expliquée
 - Onglet **Bibliothèque** qui regroupe fiches et dialogues
 - **Touche un mot anglais** (fiches, dialogues, leçons, vocabulaire) pour voir son sens, l'écouter et le revoir dans le cours
 - **35 badges** à débloquer (séries, leçons sans faute, niveaux terminés, dialogues, oreille fine…), visibles dans Progrès

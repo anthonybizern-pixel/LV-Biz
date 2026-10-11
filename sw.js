@@ -2,7 +2,7 @@
 // Stratégie : on répond tout de suite avec la version en cache, puis on la met à jour en arrière-plan.
 // Après une modification des fichiers, incrémenter VERSION force un rechargement complet du cache.
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `english-coach-${VERSION}`;
 const FILES = [
   './',
