@@ -1,11 +1,11 @@
 ﻿# English Coach : installe (ou met à jour) le rappel quotidien dans le Planificateur de tâches Windows.
 
 $ErrorActionPreference = 'Stop'
-$taskName = 'English Coach - rappel'
+$taskName = 'English Coach - rappel' # nom historique conservé : un rappel déjà installé est simplement mis à jour
 $vbs = Join-Path $PSScriptRoot 'rappel.vbs'
 
 Write-Host ''
-Write-Host '  English Coach : rappel quotidien' -ForegroundColor Green
+Write-Host '  LV Coach : rappel quotidien' -ForegroundColor Green
 Write-Host '  --------------------------------'
 $h = Read-Host '  À quelle heure veux-tu ton rappel ? (ex. 19:00 ; Entrée = 19:00)'
 if (-not $h) { $h = '19:00' }
@@ -25,7 +25,7 @@ try {
   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
   $principal = New-ScheduledTaskPrincipal -UserId "$env:USERDOMAIN\$env:USERNAME" -LogonType Interactive -RunLevel Limited
   Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal `
-    -Description "Rappel quotidien pour ta leçon d'anglais (English Coach)." -Force | Out-Null
+    -Description "Rappel quotidien pour ta leçon de langue (LV Coach)." -Force | Out-Null
 } catch {
   # Repli avec l'outil classique schtasks
   schtasks.exe /Create /F /SC DAILY /ST $time /TN $taskName /TR "wscript.exe \`"$vbs\`"" | Out-Null

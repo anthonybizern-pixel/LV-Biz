@@ -4,7 +4,7 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const DAY = 86400000;
-const STORAGE_KEY = 'english-coach-v1';
+const STORAGE_KEY = LANG.storageKey; // une progression séparée par langue
 const INTERVALS = [0, 1, 2, 4, 8, 16, 35, 70]; // jours avant la prochaine révision, selon le niveau
 const MAX_BOX = INTERVALS.length - 1;
 const MASTERED = 4;
@@ -40,7 +40,7 @@ const BY_ID = Object.fromEntries(ALL.map(i => [i.id, i]));
 const DIALOGUE_BY_UNIT = Object.fromEntries(DIALOGUES.map(d => [d.unit, d]));
 
 /* ================= Sauvegarde ================= */
-const DEFAULT_SETTINGS = { accent: 'en-US', voice: '', rate: 0.9, dailyGoal: 30, autoplay: true, listening: true, speaking: true, sounds: true, unlockAll: false, storyMode: 'hidden', storySlow: false };
+const DEFAULT_SETTINGS = { accent: LANG.defaultAccent, voice: '', rate: 0.9, dailyGoal: 30, autoplay: true, listening: true, speaking: true, sounds: true, unlockAll: false, storyMode: 'hidden', storySlow: false };
 const EMPTY = { box: 0, seen: false, due: 0, ok: 0, ko: 0 };
 
 function load() {
@@ -49,6 +49,7 @@ function load() {
   return {
     items: {}, xp: 0, streak: 0, bestStreak: 0, lastDay: null, daily: {}, lessons: 0, answers: 0, good: 0, openLevels: {}, fichesSeen: {}, dialogues: {}, custom: [], sounds: {}, badges: {}, perfects: 0, reviews: 0, flags: {}, stories: {},
     ...s,
+    lang: LANG.code,
     settings: { ...DEFAULT_SETTINGS, ...(s.settings || {}) },
   };
 }
@@ -95,37 +96,24 @@ const levelProgress = id => { const us = levelUnits(id); return us.reduce((s, u)
 const dueItems = () => ALL.filter(i => peek(i.id).seen && peek(i.id).due <= Date.now());
 
 /* ================= Sens des mots ================= */
-// Rend chaque mot anglais d'un texte cliquable (le texte est découpé avant d'être échappé)
+// Rend chaque mot d'un texte cliquable (le texte est découpé avant d'être échappé)
 function clickable(text) {
-  return String(text).split(/([A-Za-z][A-Za-z'’-]*[A-Za-z]|[A-Za-z])/)
+  return String(text).split(LANG.wordRegex)
     .map((part, k) => k % 2 ? `<span class="w" data-action="word" data-w="${esc(part)}">${esc(part)}</span>` : esc(part))
     .join('');
 }
 
-// Cherche un mot dans le lexique, en retrouvant la forme de base des formes régulières
+// Cherche un mot dans le lexique, en retrouvant sa forme de base (règles propres à chaque langue)
 function lookup(word) {
   const w = word.toLowerCase().replace(/’/g, "'");
-  const base = w.replace(/'s$/, '');
-  const cands = [w, base];
-  const add = s => { if (s && !cands.includes(s)) cands.push(s); };
-  if (/ies$|ied$/.test(base)) add(base.slice(0, -3) + 'y');
-  if (/s$/.test(base)) add(base.slice(0, -1));
-  if (/es$/.test(base)) add(base.slice(0, -2));
-  // « noted » → note avant not, « noting » → note avant not
-  if (/ed$/.test(base)) { add(base.slice(0, -1)); add(base.slice(0, -2)); }
-  if (/ing$/.test(base)) { add(base.slice(0, -3) + 'e'); add(base.slice(0, -3)); }
-  if (/er$/.test(base)) { add(base.slice(0, -2)); add(base.slice(0, -1)); }
-  if (/est$/.test(base)) add(base.slice(0, -3));
-  // consonne doublée : running → run, kidding → kid
-  cands.slice().forEach(c => { if (/([b-df-hj-np-tv-z])\1$/.test(c)) add(c.slice(0, -1)); });
-  const key = cands.find(c => LEXICON[c]);
+  const key = LANG.lemmas(w).find(c => LEXICON[c]);
   return key ? { key, tr: LEXICON[key] } : null;
 }
 
 function openWord(word) {
   closeOverlays();
   const hit = lookup(word);
-  const re = new RegExp(`(^|[^A-Za-z'])${word.replace(/[^A-Za-z'’-]/g, '')}([^A-Za-z']|$)`, 'i');
+  const re = new RegExp(`(^|[^\\p{L}'·])${word.replace(/[^\p{L}'’·-]/gu, '')}([^\\p{L}'·]|$)`, 'iu');
   const examples = ALL.filter(i => re.test(i.en)).slice(0, 3);
   const mark = en => clickable(en).replace(new RegExp(`(>)(${word})(<)`, 'gi'), '$1<mark>$2</mark>$3');
   const el = document.createElement('div');
@@ -148,6 +136,28 @@ function openWord(word) {
 }
 
 function closeOverlays() { $$('.overlay').forEach(o => o.remove()); }
+
+// Choix de la langue apprise : chaque langue a sa propre progression
+function openLangMenu() {
+  closeOverlays();
+  const el = document.createElement('div');
+  el.className = 'overlay sheet-wrap';
+  el.innerHTML = `
+    <div class="sheet-backdrop" data-action="closeOverlay"></div>
+    <div class="sheet" role="dialog" aria-label="Changer de langue">
+      <div class="sheet-head"><div class="sheet-word">Quelle langue ?</div><button class="icon-btn" data-action="closeOverlay" title="Fermer">✕</button></div>
+      <p class="muted small">Chaque langue garde sa propre progression, ses badges et ses mots perso.</p>
+      <div class="lang-list">
+        ${(window.LANGS || []).map(l => `
+          <button class="lang-choice ${l.code === LANG.code ? 'on' : ''}" data-action="setLang" data-code="${l.code}">
+            <span class="lang-flag">${l.flag}</span>
+            <span><b>${esc(l.label)}</b><span class="muted small">${esc(l.native)}</span></span>
+            ${l.code === LANG.code ? '<span class="lang-current">✓ en cours</span>' : ''}
+          </button>`).join('')}
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+}
 
 /* ================= Badges ================= */
 const masteredCount = () => ALL.filter(i => peek(i.id).box >= MASTERED).length;
@@ -175,7 +185,7 @@ const BADGES = [
   { id: 'unit', icon: '👑', name: 'Couronné', desc: 'Terminer une unité à 100 %', test: () => UNITS.some(u => !u.custom && unitProgress(u) >= 1) },
   ...LEVELS.map(l => ({ id: `level${l.id}`, icon: '🏅', name: `Niveau ${l.id} terminé`, desc: `Atteindre 100 % sur toutes les unités ${l.id}`, test: () => levelProgress(l.id) >= 1 })),
   { id: 'travel', icon: '✈️', name: 'Prêt à voyager', desc: 'Terminer « Voyager » et « Aéroport et hôtel »', test: () => unitsDone(['u6', 'u32']) },
-  { id: 'pro', icon: '💼', name: 'Anglais pro', desc: 'Terminer « Le travail », « Téléphone et e-mails » et « Négocier au travail »', test: () => unitsDone(['u8', 'u20', 'u25']) },
+  { id: 'pro', icon: '💼', name: `${LANG.Name} pro`, desc: `Terminer « ${UNIT_BY_ID.u8.title} », « ${UNIT_BY_ID.u20.title} » et « ${UNIT_BY_ID.u25.title} »`, test: () => unitsDone(['u8', 'u20', 'u25']) },
   { id: 'dialog1', icon: '💬', name: 'Premier échange', desc: 'Réussir un mini-dialogue', test: () => dialoguesDone() >= 1 },
   { id: 'dialogPerfect', icon: '✨', name: 'Répartie parfaite', desc: 'Réussir un dialogue sans aucune erreur', test: s => Object.values(s.dialogues).some(x => x.done && x.best === 0) },
   { id: 'dialog10', icon: '🗣️', name: 'Bavard', desc: 'Réussir 10 mini-dialogues', test: () => dialoguesDone() >= 10 },
@@ -220,33 +230,22 @@ function celebrate(list) {
 }
 
 /* ================= Comparaison des réponses ================= */
-const CONTRACTIONS = {
-  "i'm": 'i am', "you're": 'you are', "we're": 'we are', "they're": 'they are', "he's": 'he is', "she's": 'she is',
-  "it's": 'it is', "that's": 'that is', "what's": 'what is', "where's": 'where is', "there's": 'there is',
-  "i've": 'i have', "you've": 'you have', "we've": 'we have', "they've": 'they have',
-  "i'll": 'i will', "you'll": 'you will', "he'll": 'he will', "she'll": 'she will', "we'll": 'we will', "they'll": 'they will', "it'll": 'it will',
-  "i'd": 'i would', "you'd": 'you would', "we'd": 'we would', "he'd": 'he would', "she'd": 'she would',
-  "don't": 'do not', "doesn't": 'does not', "didn't": 'did not', "can't": 'can not', cannot: 'can not', "won't": 'will not',
-  "isn't": 'is not', "aren't": 'are not', "wasn't": 'was not', "weren't": 'were not', "haven't": 'have not', "hasn't": 'has not',
-  "couldn't": 'could not', "wouldn't": 'would not', "shouldn't": 'should not', "let's": 'let us',
-};
-const NUMBERS = {
-  0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten',
-  11: 'eleven', 12: 'twelve', 13: 'thirteen', 14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen', 18: 'eighteen',
-  19: 'nineteen', 20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty', 100: 'hundred',
-};
-
-function norm(s) {
-  return fold(String(s))
+// Forme comparable d'une réponse. keepAccents : on garde les accents (pour les signaler sans les compter faux)
+function norm(s, keepAccents = false) {
+  const contractions = LANG.contractions || {}, numbers = LANG.numbers || {};
+  let t = String(s).toLowerCase();
+  if (!keepAccents) t = fold(t);
+  return t
     .replace(/[’‘`´]/g, "'")
+    .replace(/l[·.•]l/g, 'll') // l·l catalan : « col·legi » = « collegi »
     .replace(/-/g, '')
-    .replace(/[^a-z0-9' ]+/g, ' ')
+    .replace(/[^\p{L}0-9' ]+/gu, ' ')
     .split(/\s+/)
     .flatMap(w => {
       w = w.replace(/^'+|'+$/g, '');
       if (!w) return [];
-      if (CONTRACTIONS[w]) return CONTRACTIONS[w].split(' ');
-      if (NUMBERS[w]) return [NUMBERS[w]];
+      if (contractions[w]) return contractions[w].split(' ');
+      if (numbers[w]) return [numbers[w]];
       return [w.replace(/'/g, '')];
     })
     .join(' ');
@@ -270,17 +269,25 @@ function lev(a, b) {
 function checkText(input, item, strict = false) {
   const a = norm(input);
   if (!a) return { ok: false };
-  const targets = strict ? [norm(item.en)] : accepted(item);
+  const raws = strict ? [item.en] : [item.en, ...item.alts];
   let best = null;
-  for (const t of targets) { const d = lev(a, t); if (!best || d < best.d) best = { d, t }; }
-  if (best.d === 0) return { ok: true };
+  for (const raw of raws) { const t = norm(raw), d = lev(a, t); if (!best || d < best.d) best = { d, t, raw }; }
+  if (best.d === 0) {
+    // Juste, mais les accents comptent dans certaines langues (és / es, més / mes…) : on le signale
+    const exact = norm(input, true);
+    if (LANG.accentSensitive && !raws.some(raw => norm(raw, true) === exact)) return { ok: true, typo: true, accents: true };
+    return { ok: true };
+  }
   const tolerance = best.t.length <= 4 ? 0 : best.t.length <= 12 ? 1 : best.t.length <= 30 ? 2 : 3;
   return best.d <= tolerance ? { ok: true, typo: true } : { ok: false };
 }
 
 /* ================= Audio ================= */
 let voices = [];
-function loadVoices() { voices = window.speechSynthesis ? speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang)) : []; }
+function loadVoices() {
+  const re = new RegExp(`^${LANG.voicePrefix}([-_]|$)`, 'i');
+  voices = window.speechSynthesis ? speechSynthesis.getVoices().filter(v => re.test(v.lang)) : [];
+}
 if (window.speechSynthesis) {
   loadVoices();
   speechSynthesis.onvoiceschanged = () => { loadVoices(); if (screen === 'settings') render(); };
@@ -531,11 +538,12 @@ function record(item, ok) {
   L.touched.add(item.id);
 }
 
-function grade(ok, typo = false) {
+function grade(ok, typo = false, accents = false) {
   const ex = L.ex;
   L.phase = 'feedback';
   ex.ok = ok;
   ex.typo = typo;
+  ex.accents = accents;
   if (L.kind === 'placement') {
     // Le test ne touche ni aux révisions ni aux statistiques
     if (ok) L.scores[ex.level]++;
@@ -573,7 +581,7 @@ function check() {
       const v = $('#answer').value;
       if (!v.trim()) return;
       const r = checkText(v, ex.item, ex.type === 'dictation');
-      return grade(r.ok, r.typo);
+      return grade(r.ok, r.typo, r.accents);
     }
     case 'wordbank': {
       if (!ex.chosen.length) return;
@@ -777,7 +785,7 @@ function render() {
 
 const topbar = () => `
   <header class="topbar">
-    <div class="brand">🗣️ English Coach</div>
+    <button class="brand" data-action="langMenu" title="Changer de langue"><span class="brand-flag">${LANG.flag}</span> LV Coach <span class="brand-caret">▾</span></button>
     <div class="top-stats">
       <span title="Jours d'affilée">🔥 ${currentStreak()}</span>
       <span title="XP total">⭐ ${state.xp}</span>
@@ -805,7 +813,7 @@ function renderHome() {
     ${!learned && !state.placement ? `
       <section class="card placement-card">
         <div class="placement-icon">🧭</div>
-        <div><strong>Tu as déjà des bases en anglais ?</strong>
+        <div><strong>Tu as déjà des bases en ${LANG.name} ?</strong>
           <p class="muted small">Fais le test de niveau (2 à 5 minutes) pour savoir par où commencer.</p></div>
         <button class="btn btn-primary" data-action="placement">Faire le test</button>
       </section>` : ''}
@@ -1076,9 +1084,9 @@ function renderMyWords() {
     <p class="muted">Ajoute les mots et phrases que tu croises (séries, travail, voyages…). Ils entrent dans tes leçons et tes révisions, comme le reste du cours.</p>
     <section class="card form">
       <h3>Ajouter une expression</h3>
-      <label class="field"><span>En anglais</span><input id="myEn" placeholder="ex. It's up to you" autocomplete="off" spellcheck="false"></label>
-      <label class="field"><span>En français</span><input id="myFr" placeholder="ex. C'est toi qui vois" autocomplete="off"></label>
-      <label class="field"><span>Autres réponses acceptées <small class="muted">(facultatif, séparées par /)</small></span><input id="myAlts" placeholder="ex. It depends on you" autocomplete="off" spellcheck="false"></label>
+      <label class="field"><span>En ${LANG.name}</span><input id="myEn" placeholder="ex. ${esc(LANG.example.en)}" autocomplete="off" spellcheck="false"></label>
+      <label class="field"><span>En français</span><input id="myFr" placeholder="ex. ${esc(LANG.example.fr)}" autocomplete="off"></label>
+      <label class="field"><span>Autres réponses acceptées <small class="muted">(facultatif, séparées par /)</small></span><input id="myAlts" placeholder="ex. ${esc(LANG.example.alts)}" autocomplete="off" spellcheck="false"></label>
       <div class="btn-row">
         <button class="btn btn-secondary" data-action="myListen">🔊 Écouter</button>
         <button class="btn btn-primary" data-action="myAdd">＋ Ajouter</button>
@@ -1105,8 +1113,8 @@ function renderMyWords() {
 function addCustom() {
   const en = $('#myEn').value.trim(), fr = $('#myFr').value.trim();
   const alts = $('#myAlts').value.split(/[\/;]/).map(s => s.trim()).filter(Boolean);
-  if (!en || !fr) { toast('Remplis l’anglais et le français'); return; }
-  if (!norm(en)) { toast('L’expression anglaise doit contenir des lettres'); return; }
+  if (!en || !fr) { toast('Remplis les deux champs'); return; }
+  if (!norm(en)) { toast(`L’expression ${LANG.adjF} doit contenir des lettres`); return; }
   if (state.custom.some(c => norm(c.en) === norm(en))) { toast('Cette expression est déjà dans ta liste'); return; }
   state.custom.push({ id: Date.now().toString(36), en, fr, alts });
   save();
@@ -1301,7 +1309,7 @@ function exerciseHTML(ex) {
       <div class="prompt">${speakerBtn(it.en)}<span class="prompt-text">${clickable(it.en)}</span></div>
       ${optionsHTML(ex)}`;
     case 'mc_fr_en': return `
-      <h2>Comment dit-on en anglais ?</h2>
+      <h2>Comment dit-on en ${LANG.name} ?</h2>
       <div class="prompt"><span class="prompt-text">${esc(it.fr)}</span></div>
       ${optionsHTML(ex)}`;
     case 'listen_mc': return `
@@ -1309,13 +1317,13 @@ function exerciseHTML(ex) {
       ${listenBlock(it)}
       ${optionsHTML(ex)}`;
     case 'type_fr_en': return `
-      <h2>Traduis en anglais</h2>
+      <h2>Traduis en ${LANG.name}</h2>
       <div class="prompt"><span class="prompt-text">${esc(it.fr)}</span></div>
-      ${answerBox('Écris en anglais…')}`;
+      ${answerBox(`Écris en ${LANG.name}…`)}`;
     case 'dictation': return `
       <h2>Écris ce que tu entends</h2>
       ${listenBlock(it)}
-      ${answerBox('Écris en anglais…')}`;
+      ${answerBox(`Écris en ${LANG.name}…`)}`;
     case 'wordbank': return `
       <h2>Traduis cette phrase</h2>
       <div class="prompt"><span class="prompt-text">${esc(it.fr)}</span></div>
@@ -1361,7 +1369,7 @@ function footHTML() {
     const pair = ex.item ? `<div class="fb-answer"><b>${clickable(ex.item.en)}</b> — ${esc(ex.item.fr)}</div>` : '';
     if (ex.neutral) { cls = 'neutral'; title = 'Pas grave, on continue !'; body = `<div class="small">Écoute bien la prononciation :</div>${pair}`; }
     else if (ex.type === 'match') { cls = 'ok'; title = ex.errors.size ? 'Toutes les paires trouvées !' : pick(PRAISE); }
-    else if (ex.ok) { cls = 'ok'; title = pick(PRAISE); body = ex.typo ? `<div class="small">Attention à l’orthographe :</div>${pair}` : pair; }
+    else if (ex.ok) { cls = 'ok'; title = pick(PRAISE); body = ex.typo ? `<div class="small">${ex.accents ? "Attention aux accents :" : "Attention à l’orthographe :"}</div>${pair}` : pair; }
     else { cls = 'ko'; title = 'Pas tout à fait…'; body = `<div class="small">Bonne réponse :</div>${pair}`; }
     return `
       <div class="feedback ${cls}">
@@ -1373,7 +1381,7 @@ function footHTML() {
       </div>`;
   }
   if (ex.type === 'intro') return `<div class="foot-row"><span></span><button class="btn btn-primary" data-action="continue">Compris !</button></div>`;
-  if (ex.type === 'match') return `<div class="foot-row"><span class="muted small">Touche un mot anglais puis sa traduction.</span></div>`;
+  if (ex.type === 'match') return `<div class="foot-row"><span class="muted small">Touche un mot en ${LANG.name} puis sa traduction.</span></div>`;
   if (ex.type === 'speak') return `<div class="foot-row"><button class="btn btn-ghost" data-action="skip" data-what="speak">Je ne peux pas parler maintenant</button></div>`;
   const skip = L.kind === 'placement'
     ? '<button class="btn btn-ghost" data-action="dunno">Je ne sais pas</button>'
@@ -1536,13 +1544,13 @@ function renderSettings() {
   <main class="page">
     <h1>Réglages</h1>
     <section class="card form">
-      <h3>Voix anglaise</h3>
+      <h3>Voix ${LANG.adjF}</h3>
+      ${LANG.accents.length > 1 ? `
       <label class="row-between">Accent
         <select data-setting="accent">
-          <option value="en-US" ${s.accent === 'en-US' ? 'selected' : ''}>🇺🇸 Américain</option>
-          <option value="en-GB" ${s.accent === 'en-GB' ? 'selected' : ''}>🇬🇧 Britannique</option>
+          ${LANG.accents.map(([v, l]) => `<option value="${v}" ${s.accent === v ? 'selected' : ''}>${l}</option>`).join('')}
         </select>
-      </label>
+      </label>` : ''}
       <label class="row-between">Voix
         <select data-setting="voice">
           <option value="">Automatique</option>
@@ -1552,9 +1560,9 @@ function renderSettings() {
       <label class="row-between">Vitesse
         <span class="range"><input type="range" min="0.5" max="1.3" step="0.05" value="${s.rate}" data-setting="rate"><output id="rateOut">${Number(s.rate).toFixed(2)}×</output></span>
       </label>
-      <button class="btn btn-secondary" data-action="say" data-text="Hello! Let's practice English together.">🔊 Tester la voix</button>
+      <button class="btn btn-secondary" data-action="say" data-text="${esc(LANG.testPhrase)}">🔊 Tester la voix</button>
       ${!window.speechSynthesis ? '<p class="warn">Ce navigateur ne sait pas lire de texte à voix haute.</p>'
-        : !voices.length ? '<p class="warn">Aucune voix anglaise trouvée. Sous Windows : Paramètres › Heure et langue › Voix › Ajouter des voix (anglais).</p>' : ''}
+        : !voices.length ? `<p class="warn">Aucune voix ${LANG.adjF} trouvée sur cet appareil. ${LANG.voiceHelp}</p>` : ''}
     </section>
     <section class="card form">
       <h3>Leçons</h3>
@@ -1579,7 +1587,7 @@ function renderSettings() {
         <label class="time-field">Heure <input type="time" id="reminderTime" value="${esc(state.settings.reminderTime || '19:00')}"></label>
         <button class="btn btn-primary" data-action="calendar">📅 Ajouter à mon agenda</button>
       </div>
-      <p class="muted small">Ton agenda te demandera de confirmer l’ajout. Pour arrêter, supprime simplement l’événement « Leçon d’anglais ».</p>
+      <p class="muted small">Ton agenda te demandera de confirmer l’ajout. Pour arrêter, supprime simplement l’événement « Leçon ${LANG.de} ».</p>
       ${location.protocol === 'file:' ? `
         <details class="small">
           <summary><b>Sur PC Windows : notification sans agenda</b></summary>
@@ -1648,7 +1656,7 @@ function openStory(id) {
 
 function renderStory() {
   const s = P.story, mode = state.settings.storyMode;
-  const modes = [['hidden', '🙈 Masqué'], ['en', '🇬🇧 Texte'], ['fr', '🇫🇷 + Traduction']];
+  const modes = [['hidden', '🙈 Masqué'], ['en', `${LANG.flag} Texte`], ['fr', '🇫🇷 + Traduction']];
   return `
   <div class="lesson story">
     <header class="lesson-top">
@@ -1855,9 +1863,6 @@ window.addEventListener('appinstalled', () => {
   if (screen === 'settings') render();
 });
 
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { /* hors ligne indisponible */ }));
-}
 
 function installSection() {
   let body;
@@ -1867,7 +1872,7 @@ function installSection() {
     body = `<p class="small">Pour l’installer sur ton téléphone, l’appli doit d’abord être mise en ligne (gratuitement) : voir le fichier <b>LISEZMOI</b>.
       Ouvre ensuite son adresse sur ton téléphone et reviens ici.</p>`;
   } else if (installPrompt) {
-    body = `<p class="small">Ajoute English Coach à ton écran d’accueil : elle s’ouvrira en plein écran, comme une vraie appli, même sans connexion.</p>
+    body = `<p class="small">Ajoute LV Coach à ton écran d’accueil : elle s’ouvrira en plein écran, comme une vraie appli, même sans connexion.</p>
       <button class="btn btn-primary" data-action="install">📲 Installer l’appli</button>`;
   } else if (isIOS()) {
     body = `<ol class="small steps">
@@ -1899,22 +1904,22 @@ function downloadCalendar() {
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
   const url = location.protocol.startsWith('http') ? location.href.split('#')[0] : '';
   const ics = [
-    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//English Coach//FR', 'CALSCALE:GREGORIAN',
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//LV Coach//FR', 'CALSCALE:GREGORIAN',
     'BEGIN:VEVENT',
-    `UID:english-coach-rappel-${stamp}@english-coach`,
+    `UID:lv-coach-rappel-${LANG.code}-${stamp}@lv-coach`,
     `DTSTAMP:${stamp}`,
     `DTSTART:${start}`,
     'DURATION:PT10M',
     'RRULE:FREQ=DAILY',
-    'SUMMARY:🗣️ Leçon d’anglais',
-    `DESCRIPTION:5 minutes d’anglais avec English Coach !${url ? `\\n${url}` : ''}`,
+    `SUMMARY:🗣️ Leçon ${LANG.de}`,
+    `DESCRIPTION:5 minutes ${LANG.de} avec LV Coach !${url ? `\\n${url}` : ''}`,
     ...(url ? [`URL:${url}`] : []),
-    'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0M', 'DESCRIPTION:C’est l’heure de ton anglais !', 'END:VALARM',
+    'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0M', `DESCRIPTION:C’est l’heure de ta leçon ${LANG.de} !`, 'END:VALARM',
     'END:VEVENT', 'END:VCALENDAR',
   ].join('\r\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-  a.download = 'rappel-anglais.ics';
+  a.download = `rappel-${LANG.code}.ics`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   toast('Ouvre le fichier pour l’ajouter à ton agenda');
@@ -1976,7 +1981,7 @@ function exportData() {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `english-coach-sauvegarde-${today()}.json`;
+  a.download = `lv-coach-${LANG.code}-sauvegarde-${today()}.json`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
@@ -1987,6 +1992,13 @@ function importData(file) {
     try {
       const data = JSON.parse(reader.result);
       if (!data || typeof data.items !== 'object') throw new Error('format');
+      // Les anciennes sauvegardes n'ont pas de langue : ce sont des sauvegardes d'anglais
+      const lang = data.lang || 'en';
+      if (lang !== LANG.code) {
+        const other = (window.LANGS || []).find(l => l.code === lang);
+        toast(`Cette sauvegarde est celle du ${other ? other.label.toLowerCase() : 'une autre langue'} : change de langue pour l’importer`);
+        return;
+      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       state = load();
       syncCustomUnit();
@@ -2015,7 +2027,7 @@ const actions = {
   storyBack: () => { const id = Q.story.id; Q = null; openStory(id); },
   storyRelisten: el => { state.settings.storyMode = el.dataset.mode; save(); const id = Q.story.id; Q = null; openStory(id); },
   myAdd: () => addCustom(),
-  myListen: () => { const en = $('#myEn').value.trim(); if (en) speak(en); else toast('Écris d’abord l’expression en anglais'); },
+  myListen: () => { const en = $('#myEn').value.trim(); if (en) speak(en); else toast(`Écris d’abord l’expression en ${LANG.name}`); },
   myDel: el => {
     const c = state.custom.find(x => x.id === el.dataset.id);
     if (!c || !confirm(`Supprimer « ${c.en} » de ta liste ?`)) return;
@@ -2087,6 +2099,13 @@ const actions = {
   },
   say: el => speak(el.dataset.text, !!el.dataset.slow, { alt: !!el.dataset.alt }),
   word: el => openWord(el.dataset.w),
+  langMenu: () => openLangMenu(),
+  setLang: el => {
+    if (el.dataset.code === LANG.code) { closeOverlays(); return; }
+    window.speechSynthesis && speechSynthesis.cancel();
+    try { localStorage.setItem('lv-lang', el.dataset.code); } catch (e) { /* ignore */ }
+    location.reload();
+  },
   install: async () => {
     if (!installPrompt) return;
     installPrompt.prompt();

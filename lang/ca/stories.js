@@ -1,0 +1,260 @@
+// Mini-histoires audio en catalan (mode Écoute).
+// lines : [locuteur, "catalan", "français"]. Locuteurs : "N" = narrateur, "A" = voix principale, "B" = seconde voix.
+// speakers : nom affiché pour chaque locuteur. questions : réponse = index de la bonne option.
+
+const STORIES = [
+  /* ---------- A1 ---------- */
+  {
+    id: "s1", level: "A1", icon: "⏰", title: "El matí de la Laia", desc: "Une routine bien réglée",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "La Laia es lleva a les set cada matí.", "Laia se lève à sept heures tous les matins."],
+      ["N", "Primer, es dutxa i es vesteix.", "D'abord, elle se douche et s'habille."],
+      ["N", "Després, es fa un cafè amb llet a la cuina.", "Ensuite, elle se fait un café au lait dans la cuisine."],
+      ["N", "Per esmorzar, menja pa amb tomàquet.", "Au petit-déjeuner, elle mange du pain à la tomate."],
+      ["N", "A les vuit, agafa el metro per anar a la feina.", "À huit heures, elle prend le métro pour aller au travail."],
+      ["N", "El metro sempre va ple, i ella llegeix al mòbil.", "Le métro est toujours plein, et elle lit sur son portable."],
+      ["N", "La Laia treballa en una botiga del centre de Barcelona.", "Laia travaille dans un magasin du centre de Barcelone."],
+      ["N", "Li agrada la seva feina, però no li agraden els dilluns!", "Elle aime son travail, mais elle n'aime pas les lundis !"],
+    ],
+    questions: [
+      { q: "A quina hora es lleva la Laia?", fr: "À quelle heure Laia se lève-t-elle ?", options: ["A les sis", "A les set", "A les vuit"], answer: 1 },
+      { q: "Com va a la feina?", fr: "Comment va-t-elle au travail ?", options: ["En cotxe", "En metro", "A peu"], answer: 1 },
+      { q: "Què menja per esmorzar?", fr: "Que mange-t-elle au petit-déjeuner ?", options: ["Galetes", "Res", "Pa amb tomàquet"], answer: 2 },
+    ],
+  },
+  {
+    id: "s2", level: "A1", icon: "🥖", title: "Al forn de pa", desc: "Júlia achète son pain",
+    speakers: { A: "Júlia", B: "La fornera" },
+    lines: [
+      ["B", "Bon dia! Què li poso?", "Bonjour ! Qu'est-ce que je vous sers ?"],
+      ["A", "Bon dia! Voldria una barra de pa, si us plau.", "Bonjour ! Je voudrais une baguette, s'il vous plaît."],
+      ["B", "Alguna cosa més?", "Autre chose ?"],
+      ["A", "Sí, dos croissants de xocolata.", "Oui, deux croissants au chocolat."],
+      ["B", "Ho sento, de xocolata ja no en queden. Els tinc de mantega.", "Désolée, il n'en reste plus au chocolat. J'en ai au beurre."],
+      ["A", "D'acord, doncs dos de mantega.", "D'accord, alors deux au beurre."],
+      ["B", "És per emportar?", "C'est à emporter ?"],
+      ["A", "Sí. Quant és?", "Oui. Ça fait combien ?"],
+      ["B", "Són quatre euros amb cinquanta.", "Ça fait quatre euros cinquante."],
+      ["A", "Aquí té. Gràcies, que vagi bé!", "Voici. Merci, bonne journée !"],
+    ],
+    questions: [
+      { q: "Què compra la Júlia primer?", fr: "Qu'achète Júlia en premier ?", options: ["Una barra de pa", "Un pastís", "Una ensaïmada"], answer: 0 },
+      { q: "Per què no compra croissants de xocolata?", fr: "Pourquoi n'achète-t-elle pas de croissants au chocolat ?", options: ["No en queden", "Són massa cars", "No li agrada la xocolata"], answer: 0 },
+      { q: "Quant paga?", fr: "Combien paie-t-elle ?", options: ["Quatre euros amb cinquanta", "Cinc euros amb quaranta", "Quatre euros amb quinze"], answer: 0 },
+    ],
+  },
+  {
+    id: "s3", level: "A1", icon: "👨‍👩‍👧‍👦", title: "La família d'en Marc", desc: "Marc se présente",
+    speakers: { N: "Marc" },
+    lines: [
+      ["N", "Hola! Em dic Marc i tinc trenta-dos anys.", "Salut ! Je m'appelle Marc et j'ai trente-deux ans."],
+      ["N", "Visc a Tarragona amb la meva dona, la Sílvia, i els nostres dos fills.", "J'habite à Tarragone avec ma femme, Sílvia, et nos deux enfants."],
+      ["N", "El nostre fill, en Pol, té vuit anys, i la nostra filla, la Mia, en té cinc.", "Notre fils, Pol, a huit ans, et notre fille, Mia, en a cinq."],
+      ["N", "La Sílvia és infermera i treballa a l'hospital.", "Sílvia est infirmière et elle travaille à l'hôpital."],
+      ["N", "Jo soc mestre en una escola.", "Je suis instituteur dans une école."],
+      ["N", "Els meus pares viuen a Lleida, i no els veiem gaire.", "Mes parents habitent à Lleida, et nous ne les voyons pas beaucoup."],
+      ["N", "Però cada estiu passem dues setmanes a casa seva.", "Mais chaque été, nous passons deux semaines chez eux."],
+      ["N", "Els nens s'ho passen molt bé, perquè el meu pare té un gos molt gran!", "Les enfants s'amusent beaucoup, parce que mon père a un très grand chien !"],
+    ],
+    questions: [
+      { q: "Quants fills té en Marc?", fr: "Combien d'enfants Marc a-t-il ?", options: ["Un", "Dos", "Tres"], answer: 1 },
+      { q: "Quina feina fa la Sílvia?", fr: "Quel est le métier de Sílvia ?", options: ["És mestra", "És metgessa", "És infermera"], answer: 2 },
+      { q: "Per què els nens s'ho passen bé a casa dels avis?", fr: "Pourquoi les enfants s'amusent-ils chez leurs grands-parents ?", options: ["Per la platja", "Pel gos", "Pels regals"], answer: 1 },
+    ],
+  },
+
+  /* ---------- A2 ---------- */
+  {
+    id: "s4", level: "A2", icon: "🏰", title: "Un cap de setmana a Girona", desc: "Júlia et Nadia visitent Gérone",
+    speakers: { N: "Narrateur" },
+    lines: [
+      ["N", "El cap de setmana passat, la Júlia i la seva amiga Nadia van anar a Girona.", "Le week-end dernier, Júlia et son amie Nadia sont allées à Gérone."],
+      ["N", "Hi van anar en tren divendres a la tarda.", "Elles y sont allées en train vendredi après-midi."],
+      ["N", "Dissabte al matí van passejar pel barri vell i van veure la catedral.", "Samedi matin, elles se sont promenées dans le vieux quartier et ont vu la cathédrale."],
+      ["N", "A la tarda va començar a ploure, així que van anar a un museu.", "L'après-midi, il s'est mis à pleuvoir, alors elles sont allées dans un musée."],
+      ["N", "La Júlia es va comprar un paraigua vermell a la botiga del museu.", "Júlia s'est acheté un parapluie rouge à la boutique du musée."],
+      ["N", "Al vespre van sopar en un restaurant petit al costat del riu.", "Le soir, elles ont dîné dans un petit restaurant au bord de la rivière."],
+      ["N", "Diumenge va fer un dia preciós, i van menjar un gelat a la plaça.", "Dimanche, il a fait un temps magnifique, et elles ont mangé une glace sur la place."],
+      ["N", "Van tornar cansades però molt contentes.", "Elles sont rentrées fatiguées mais très contentes."],
+    ],
+    questions: [
+      { q: "Com van anar a Girona?", fr: "Comment sont-elles allées à Gérone ?", options: ["En avió", "En tren", "En cotxe"], answer: 1 },
+      { q: "Què van fer quan va començar a ploure?", fr: "Qu'ont-elles fait quand il s'est mis à pleuvoir ?", options: ["Van anar al cinema", "Van tornar a l'hotel", "Van anar a un museu"], answer: 2 },
+      { q: "Què es va comprar la Júlia?", fr: "Qu'est-ce que Júlia s'est acheté ?", options: ["Un llibre", "Un paraigua vermell", "Una bossa"], answer: 1 },
+      { q: "Quin temps va fer diumenge?", fr: "Quel temps a-t-il fait dimanche ?", options: ["Un dia preciós", "Va ploure", "Va fer fred"], answer: 0 },
+    ],
+  },
+  {
+    id: "s5", level: "A2", icon: "🛫", title: "Perdut a l'aeroport", desc: "Marc cherche sa porte d'embarquement",
+    speakers: { A: "Marc", B: "L'agent" },
+    lines: [
+      ["A", "Perdoni, crec que m'he perdut. He de trobar la porta vint-i-dos.", "Excusez-moi, je crois que je me suis perdu. Je dois trouver la porte vingt-deux."],
+      ["B", "Deixi'm veure la targeta d'embarcament… El seu vol surt de la terminal 2.", "Montrez-moi votre carte d'embarquement… Votre vol part du terminal 2."],
+      ["A", "De la terminal 2? Però si som a la terminal 1!", "Du terminal 2 ? Mais on est au terminal 1 !"],
+      ["B", "No es preocupi. Hi ha un autobús gratuït que surt cada cinc minuts.", "Ne vous inquiétez pas. Il y a un bus gratuit qui part toutes les cinq minutes."],
+      ["A", "On el puc agafar?", "Où est-ce que je peux le prendre ?"],
+      ["B", "Surti per aquella porta i giri a la dreta. Veurà els cartells.", "Sortez par cette porte et tournez à droite. Vous verrez les panneaux."],
+      ["A", "Quant es triga?", "Combien de temps ça prend ?"],
+      ["B", "Uns deu minuts. El seu vol surt a les onze: té temps de sobres.", "Environ dix minutes. Votre vol part à onze heures : vous avez largement le temps."],
+      ["A", "Moltíssimes gràcies!", "Merci infiniment !"],
+    ],
+    questions: [
+      { q: "Quina porta busca en Marc?", fr: "Quelle porte Marc cherche-t-il ?", options: ["La dotze", "La vint-i-dos", "La vint"], answer: 1 },
+      { q: "Com va a la terminal 2?", fr: "Comment va-t-il au terminal 2 ?", options: ["En taxi", "A peu", "En un autobús gratuït"], answer: 2 },
+      { q: "Cada quant surt l'autobús?", fr: "À quelle fréquence part le bus ?", options: ["Cada cinc minuts", "Cada deu minuts", "Cada hora"], answer: 0 },
+    ],
+  },
+  {
+    id: "s6", level: "A2", icon: "🧑‍💻", title: "La nova companya", desc: "Premier jour au bureau pour Rita",
+    speakers: { A: "Emma", B: "Rita" },
+    lines: [
+      ["A", "Hola, tu deus ser la nova dissenyadora. Jo soc l'Emma, de màrqueting.", "Salut, tu dois être la nouvelle graphiste. Moi, c'est Emma, du marketing."],
+      ["B", "Hola, Emma, encantada! Sí, soc la Rita. És el meu primer dia.", "Salut Emma, enchantée ! Oui, je suis Rita. C'est mon premier jour."],
+      ["A", "Benvinguda! Com t'ha anat el viatge aquest matí?", "Bienvenue ! Comment s'est passé ton trajet ce matin ?"],
+      ["B", "No gaire bé. El tren anava amb retard i he hagut d'anar dreta tot el viatge.", "Pas très bien. Le train avait du retard et j'ai dû rester debout tout le trajet."],
+      ["A", "Passa sovint en aquesta línia. Alguns venim amb bicicleta.", "Ça arrive souvent sur cette ligne. Certains d'entre nous viennent à vélo."],
+      ["B", "Bona idea. Hi ha algun lloc per deixar la bici?", "Bonne idée. Il y a un endroit pour laisser son vélo ?"],
+      ["A", "Sí, al pàrquing, darrere de l'edifici.", "Oui, au parking, derrière le bâtiment."],
+      ["A", "Per cert, els divendres sovint dinem junts. Vols venir?", "Au fait, le vendredi, on déjeune souvent ensemble. Tu veux venir ?"],
+      ["B", "M'encantaria. Gràcies, Emma!", "Avec grand plaisir. Merci, Emma !"],
+    ],
+    questions: [
+      { q: "Quina feina fa la Rita?", fr: "Quel est le métier de Rita ?", options: ["És dissenyadora", "Treballa a màrqueting", "És la directora"], answer: 0 },
+      { q: "Per què el viatge no ha anat bé?", fr: "Pourquoi le trajet s'est-il mal passé ?", options: ["S'ha perdut", "El tren anava amb retard", "La bici s'ha espatllat"], answer: 1 },
+      { q: "Quan dinen junts?", fr: "Quand déjeunent-ils ensemble ?", options: ["Els dilluns", "Cada dia", "Els divendres"], answer: 2 },
+    ],
+  },
+
+  /* ---------- B1 ---------- */
+  {
+    id: "s7", level: "B1", icon: "🏨", title: "L'hotel decebedor", desc: "Des vacances qui commencent mal",
+    speakers: { N: "Ben" },
+    lines: [
+      ["N", "Quan vam arribar a l'hotel, de seguida vaig saber que alguna cosa no anava bé.", "Quand nous sommes arrivés à l'hôtel, j'ai tout de suite su que quelque chose n'allait pas."],
+      ["N", "A les fotos del web hi havia un edifici modern amb piscina.", "Sur les photos du site, il y avait un bâtiment moderne avec une piscine."],
+      ["N", "En realitat, l'edifici era vell, i feia mesos que la piscina estava tancada.", "En réalité, le bâtiment était vieux, et la piscine était fermée depuis des mois."],
+      ["N", "L'habitació era minúscula i la finestra donava a un aparcament.", "La chambre était minuscule et la fenêtre donnait sur un parking."],
+      ["N", "I encara pitjor: l'aire condicionat no funcionava, i a fora feia trenta-cinc graus.", "Et pire encore : la climatisation ne marchait pas, et dehors il faisait trente-cinq degrés."],
+      ["N", "Vaig baixar a recepció i em vaig queixar amb educació, però amb fermesa.", "Je suis descendu à la réception et je me suis plaint poliment, mais fermement."],
+      ["N", "El director es va disculpar i ens va oferir una altra habitació a l'últim pis.", "Le directeur s'est excusé et nous a proposé une autre chambre au dernier étage."],
+      ["N", "Tenia balcó i vistes al mar, així que al final vam acabar força contents.", "Elle avait un balcon et vue sur la mer, donc finalement nous étions plutôt contents."],
+      ["N", "Lliçó apresa: llegeix sempre les opinions, no només miris les fotos!", "Leçon retenue : lis toujours les avis, ne regarde pas seulement les photos !"],
+    ],
+    questions: [
+      { q: "Què li passava a la piscina?", fr: "Quel était le problème de la piscine ?", options: ["Estava bruta", "Estava tancada", "Era massa petita"], answer: 1 },
+      { q: "Quin problema tenia l'habitació?", fr: "Quel problème avait la chambre ?", options: ["L'aire condicionat no funcionava", "La dutxa estava espatllada", "Hi havia molt soroll"], answer: 0 },
+      { q: "Com va solucionar el problema el director?", fr: "Comment le directeur a-t-il réglé le problème ?", options: ["Els va tornar els diners", "Els va oferir una altra habitació", "Va arreglar l'aire condicionat"], answer: 1 },
+      { q: "Quin consell dona en Ben?", fr: "Quel conseil Ben donne-t-il ?", options: ["Reservar aviat", "Llegir sempre les opinions", "No viatjar mai a l'estiu"], answer: 1 },
+    ],
+  },
+  {
+    id: "s8", level: "B1", icon: "🤝", title: "L'entrevista de feina", desc: "Lucas postule dans une entreprise internationale",
+    speakers: { A: "Lucas", B: "La senyora Mas" },
+    lines: [
+      ["B", "Gràcies per venir, Lucas. Em pot parlar una mica de la seva trajectòria?", "Merci d'être venu, Lucas. Pouvez-vous me parler un peu de votre parcours ?"],
+      ["A", "És clar. Vaig estudiar màrqueting a Lió, i fa quatre anys que treballo en una agència de viatges.", "Bien sûr. J'ai étudié le marketing à Lyon, et je travaille dans une agence de voyages depuis quatre ans."],
+      ["B", "I per què li interessa aquesta feina?", "Et pourquoi ce poste vous intéresse-t-il ?"],
+      ["A", "M'agradaria treballar en un equip internacional, i admiro molt els seus productes.", "J'aimerais travailler dans une équipe internationale, et j'admire beaucoup vos produits."],
+      ["B", "Quin diria que és el seu punt feble?", "Quel serait votre point faible, selon vous ?"],
+      ["A", "De vegades em costa dir que no, i acabo agafant massa feina.", "Parfois, j'ai du mal à dire non, et je finis par prendre trop de travail."],
+      ["A", "Però he après a prioritzar i a demanar ajuda quan la necessito.", "Mais j'ai appris à établir des priorités et à demander de l'aide quand j'en ai besoin."],
+      ["B", "És una resposta molt sincera. Quan podria començar?", "C'est une réponse très honnête. Quand pourriez-vous commencer ?"],
+      ["A", "He de donar un mes de preavís, així que a partir de l'u de març.", "Je dois donner un mois de préavis, donc à partir du premier mars."],
+    ],
+    questions: [
+      { q: "Quant de temps fa que en Lucas treballa a l'agència?", fr: "Depuis combien de temps Lucas travaille-t-il à l'agence ?", options: ["Dos anys", "Quatre anys", "Sis anys"], answer: 1 },
+      { q: "Per què vol aquesta feina?", fr: "Pourquoi veut-il ce poste ?", options: ["Per tenir un sou més alt", "Per treballar en un equip internacional", "Per viure a Barcelona"], answer: 1 },
+      { q: "Quin és el seu punt feble?", fr: "Quel est son point faible ?", options: ["Sempre arriba tard", "Li costa dir que no", "No li agrada treballar en equip"], answer: 1 },
+      { q: "Quan pot començar?", fr: "Quand peut-il commencer ?", options: ["Immediatament", "La setmana que ve", "L'u de març"], answer: 2 },
+    ],
+  },
+  {
+    id: "s9", level: "B1", icon: "🕯️", title: "L'apagada", desc: "Un dîner qui ne se passe pas comme prévu",
+    speakers: { N: "Clara" },
+    lines: [
+      ["N", "Estava fent el sopar per als meus amics quan, de sobte, es va apagar la llum.", "J'étais en train de préparer le dîner pour mes amis quand, soudain, la lumière s'est éteinte."],
+      ["N", "Al principi vaig pensar que era un fusible, però tot el carrer estava a les fosques.", "Au début, j'ai pensé que c'était un fusible, mais toute la rue était dans le noir."],
+      ["N", "Els convidats arribaven d'aquí a vint minuts, i el pollastre només estava mig fet.", "Les invités arrivaient dans vingt minutes, et le poulet n'était qu'à moitié cuit."],
+      ["N", "No em vaig posar nerviosa: vaig encendre unes espelmes i vaig trucar a la pizzeria del costat.", "Je ne me suis pas énervée : j'ai allumé des bougies et j'ai appelé la pizzeria d'à côté."],
+      ["N", "Per desgràcia, els seus forns tampoc no funcionaven!", "Malheureusement, leurs fours ne marchaient pas non plus !"],
+      ["N", "Quan van arribar els amics, vam sopar pa amb tomàquet, formatge i amanida a la llum de les espelmes.", "Quand les amis sont arrivés, nous avons dîné de pain à la tomate, de fromage et de salade à la lueur des bougies."],
+      ["N", "Vam jugar a cartes i vam explicar històries durant hores.", "Nous avons joué aux cartes et raconté des histoires pendant des heures."],
+      ["N", "La llum va tornar a mitjanit, just quan tothom marxava.", "La lumière est revenue à minuit, juste au moment où tout le monde partait."],
+      ["N", "El més curiós és que tots van dir que era el millor sopar que havia organitzat mai!", "Le plus drôle, c'est que tous ont dit que c'était le meilleur dîner que j'aie jamais organisé !"],
+    ],
+    questions: [
+      { q: "Què feia la Clara quan es va apagar la llum?", fr: "Que faisait Clara quand la lumière s'est éteinte ?", options: ["Dormia", "Feia el sopar", "Mirava la tele"], answer: 1 },
+      { q: "Per què no va poder demanar pizza?", fr: "Pourquoi n'a-t-elle pas pu commander de pizza ?", options: ["La pizzeria era tancada", "Els forns no funcionaven", "El telèfon no funcionava"], answer: 1 },
+      { q: "Què van sopar al final?", fr: "Qu'ont-ils mangé finalement ?", options: ["Pollastre", "Pizza", "Pa amb tomàquet, formatge i amanida"], answer: 2 },
+      { q: "Quan va tornar la llum?", fr: "Quand la lumière est-elle revenue ?", options: ["A mitjanit", "Al cap de vint minuts", "L'endemà al matí"], answer: 0 },
+    ],
+  },
+
+  /* ---------- B2 ---------- */
+  {
+    id: "s10", level: "B2", icon: "📉", title: "La reunió de crisi", desc: "Un fournisseur fait faillite",
+    speakers: { A: "Sara", B: "David" },
+    lines: [
+      ["A", "Gràcies per venir amb tan poca antelació. Em temo que tenim un problema amb el projecte Ferrer.", "Merci d'être venus si vite. J'ai bien peur que nous ayons un problème avec le projet Ferrer."],
+      ["B", "Una altra vegada el pressupost?", "Encore le budget ?"],
+      ["A", "Aquesta vegada no. El nostre principal proveïdor ha fet fallida, i l'entrega anirà com a mínim tres setmanes tard.", "Pas cette fois. Notre principal fournisseur a fait faillite, et la livraison aura au moins trois semaines de retard."],
+      ["B", "Mala notícia. Ja ho hem dit al client?", "Mauvaise nouvelle. L'avons-nous déjà dit au client ?"],
+      ["A", "Encara no. Abans volia comentar les opcions amb vosaltres.", "Pas encore. Je voulais d'abord discuter des options avec vous."],
+      ["B", "Doncs podríem buscar un altre proveïdor, però ens costaria més car.", "Eh bien, nous pourrions chercher un autre fournisseur, mais ça nous coûterait plus cher."],
+      ["A", "És cert. Una altra opció seria entregar una part de la comanda a temps i la resta més tard.", "C'est vrai. Une autre option serait de livrer une partie de la commande à temps et le reste plus tard."],
+      ["B", "Crec que el client ho preferiria. Necessita la primera part per al llançament.", "Je pense que le client préférerait ça. Il a besoin de la première partie pour le lancement."],
+      ["A", "D'acord. Els trucaré aquesta tarda i us mantindré informats.", "D'accord. Je les appellerai cet après-midi et je vous tiendrai au courant."],
+    ],
+    questions: [
+      { q: "Quin és el problema?", fr: "Quel est le problème ?", options: ["El pressupost és massa petit", "El proveïdor principal ha fet fallida", "El client ha anul·lat la comanda"], answer: 1 },
+      { q: "Quant de retard tindrà l'entrega?", fr: "Quel retard aura la livraison ?", options: ["Com a mínim tres setmanes", "Tres dies", "Tres mesos"], answer: 0 },
+      { q: "Quina solució trien?", fr: "Quelle solution choisissent-ils ?", options: ["Canviar de proveïdor", "Anul·lar el projecte", "Entregar una part de la comanda a temps"], answer: 2 },
+      { q: "Qui trucarà al client?", fr: "Qui va appeler le client ?", options: ["En David", "La Sara", "Ningú"], answer: 1 },
+    ],
+  },
+  {
+    id: "s11", level: "B2", icon: "🥐", title: "Canviar de vida", desc: "De la banque à la boulangerie",
+    speakers: { N: "Jaume" },
+    lines: [
+      ["N", "Fa cinc anys, tenia una feina ben pagada en un banc de Barcelona.", "Il y a cinq ans, j'avais un travail bien payé dans une banque de Barcelone."],
+      ["N", "Sobre el paper, tot era perfecte, però no era gens feliç.", "Sur le papier, tout était parfait, mais je n'étais pas heureux du tout."],
+      ["N", "Treballava dotze hores al dia i gairebé no veia els meus amics.", "Je travaillais douze heures par jour et je ne voyais presque jamais mes amis."],
+      ["N", "Un dia em vaig preguntar: si pogués fer qualsevol cosa, què faria?", "Un jour, je me suis demandé : si je pouvais faire n'importe quoi, que ferais-je ?"],
+      ["N", "La resposta era senzilla: obriria un petit forn de pa a la costa.", "La réponse était simple : j'ouvrirais une petite boulangerie sur la côte."],
+      ["N", "La meva família pensava que m'havia tornat boig, i, sincerament, estava espantat.", "Ma famille pensait que j'étais devenu fou, et, sincèrement, j'avais peur."],
+      ["N", "El primer any va ser molt dur, i gairebé ho vaig deixar dues vegades.", "La première année a été très dure, et j'ai failli abandonner deux fois."],
+      ["N", "Avui guanyo molts menys diners, però soc molt més feliç.", "Aujourd'hui, je gagne beaucoup moins d'argent, mais je suis bien plus heureux."],
+      ["N", "Si no m'hagués arriscat, encara em preguntaria: i si…?", "Si je n'avais pas pris ce risque, je me demanderais encore : et si… ?"],
+    ],
+    questions: [
+      { q: "Per què en Jaume no era feliç al banc?", fr: "Pourquoi Jaume n'était-il pas heureux à la banque ?", options: ["El sou era baix", "Treballava massa i no veia els amics", "El seu cap era antipàtic"], answer: 1 },
+      { q: "Què va decidir fer?", fr: "Qu'a-t-il décidé de faire ?", options: ["Obrir un forn de pa a la costa", "Anar a viure a l'estranger", "Obrir un banc nou"], answer: 0 },
+      { q: "Com va reaccionar la seva família?", fr: "Comment sa famille a-t-elle réagi ?", options: ["Estaven orgullosos", "Pensaven que s'havia tornat boig", "El van ajudar amb diners"], answer: 1 },
+      { q: "Com se sent avui?", fr: "Comment se sent-il aujourd'hui ?", options: ["Es penedeix de la decisió", "És més ric i més feliç", "Guanya menys però és molt més feliç"], answer: 2 },
+    ],
+  },
+
+  /* ---------- C1 ---------- */
+  {
+    id: "s12", level: "C1", icon: "🎙️", title: "El pòdcast: setmana de 4 dies", desc: "Une chercheuse fait le point",
+    speakers: { A: "El presentador", B: "La doctora Puig" },
+    lines: [
+      ["A", "Benvinguts de nou al programa. El tema d'avui divideix opinions: la setmana laboral de quatre dies.", "Bienvenue à nouveau dans l'émission. Le sujet du jour divise : la semaine de travail de quatre jours."],
+      ["A", "La meva convidada és la doctora Elena Puig, que fa més de deu anys que estudia la qüestió.", "Mon invitée est la docteure Elena Puig, qui étudie la question depuis plus de dix ans."],
+      ["B", "Gràcies per convidar-me. Per començar, diré que fins ara els resultats han estat sorprenentment positius.", "Merci de m'avoir invitée. Pour commencer, je dirai que jusqu'ici les résultats ont été étonnamment positifs."],
+      ["B", "En la majoria de proves, la productivitat es va mantenir estable, mentre que l'estrès i les baixes per malaltia van disminuir notablement.", "Dans la plupart des essais, la productivité est restée stable, tandis que le stress et les arrêts maladie ont nettement diminué."],
+      ["A", "Sembla massa bonic per ser veritat. Segur que hi ha inconvenients, oi?", "Ça paraît trop beau pour être vrai. Il y a sûrement des inconvénients, non ?"],
+      ["B", "És clar. Funciona molt millor a les oficines que als hospitals o a les botigues, on sempre hi ha d'haver algú.", "Bien sûr. Ça marche bien mieux dans les bureaux que dans les hôpitaux ou les magasins, où il doit toujours y avoir quelqu'un."],
+      ["B", "I alguns treballadors van trobar esgotadores les jornades més llargues.", "Et certains salariés ont trouvé les journées plus longues épuisantes."],
+      ["A", "Aleshores, ho recomanaria a totes les empreses?", "Alors, le recommanderiez-vous à toutes les entreprises ?"],
+      ["B", "No necessàriament. El que de debò importa no és el nombre de dies, sinó com s'organitza la feina.", "Pas forcément. Ce qui compte vraiment, ce n'est pas le nombre de jours, mais la façon dont le travail est organisé."],
+    ],
+    questions: [
+      { q: "Què va passar amb la productivitat en la majoria de proves?", fr: "Qu'est-il arrivé à la productivité dans la plupart des essais ?", options: ["Va augmentar molt", "Es va mantenir estable", "Va baixar"], answer: 1 },
+      { q: "On funciona millor la setmana de quatre dies?", fr: "Où la semaine de quatre jours marche-t-elle le mieux ?", options: ["Als hospitals", "A les botigues", "A les oficines"], answer: 2 },
+      { q: "Quin inconvenient s'esmenta?", fr: "Quel inconvénient est mentionné ?", options: ["Sous més baixos", "Alguns treballadors van trobar esgotadores les jornades llargues", "Els clients es van queixar"], answer: 1 },
+      { q: "Quina és la idea principal de la doctora Puig?", fr: "Quelle est l'idée principale de la docteure Puig ?", options: ["Totes les empreses l'haurien d'adoptar", "L'organització importa més que el nombre de dies", "No funciona gens"], answer: 1 },
+    ],
+  },
+];
